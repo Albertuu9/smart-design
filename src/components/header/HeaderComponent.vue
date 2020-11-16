@@ -1,38 +1,20 @@
 <template>
   <v-app-bar app dark>
-    <div class="d-flex ma-3">
-      LOGO
+    <div class="d-flex">
+      <v-btn @click="openMenu()" icon>
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
     </div>
-    <div class="d-flex align-center">
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn class="ml-2" small color="success" v-bind="attrs" v-on="on">
-            <v-icon small class="pr-1 icons">
-              mdi-view-grid-plus
-            </v-icon>
-            Crear
-          </v-btn>
-        </template>
-        <span>Crear nuevo componente</span>
-      </v-tooltip>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn class="ml-2" small color="success" v-bind="attrs" v-on="on">
-            <v-icon small class="pr-1 icons">
-              mdi-content-save
-            </v-icon>
-            Guardar
-          </v-btn>
-        </template>
-        <span>Guardar proyecto</span>
-      </v-tooltip>
+    <div class="d-flex ma-3 font-italic">
+      <router-link class="link-no-decoration" to="/home">
+        <h3>SMARTDESIGN</h3>
+      </router-link>
     </div>
     <v-spacer></v-spacer>
     <div class="d-flex align-center">
       <v-select
         class="pr-3 pt-5 mt-1"
         v-model="select"
-        append-icon="mdi-translate"
         :items="items"
         item-text="name"
         item-value="id"
@@ -67,6 +49,8 @@ export default {
     return {
       darkMode: false,
       messages: 1,
+      select: null,
+      openMenuData: false,
       items: [
         { id: 1, name: "Español" },
         { id: 2, name: "Català" },
@@ -75,6 +59,11 @@ export default {
       ],
     };
   },
-  methods: {},
+  methods: {
+    openMenu() {
+      this.openMenuData = !this.openMenuData;
+      this.$emit("openMenu", !this.openMenuData);
+    },
+  },
 };
 </script>

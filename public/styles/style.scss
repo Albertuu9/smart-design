@@ -10,7 +10,18 @@ small{
     opacity: 0.35;
 }
 
+.link-no-decoration{
+    text-decoration: none;
+}
+
+.link-no-decoration > h3 {
+    color: #fefefe;
+}
+
 *{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    @media only screen and (max-width: 1020px) {
+        display: none;
+    }
 }
 

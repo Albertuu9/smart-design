@@ -56,6 +56,7 @@ export default {
   name: "MyProfileOptions",
   data() {
     return {
+      darkMode: null,
       items: [
         { text: "Mi perfil", icon: "mdi-account", disabled: false },
         { text: "Mis proyectos", icon: "mdi-archive", disabled: false },
