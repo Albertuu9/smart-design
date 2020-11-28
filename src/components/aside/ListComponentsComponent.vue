@@ -166,7 +166,7 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 120px;
+  width: 200px;
   font-weight: bolder;
 }
 .options-wrapper {

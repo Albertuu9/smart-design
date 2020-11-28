@@ -11,18 +11,10 @@
       </router-link>
     </div>
     <v-spacer></v-spacer>
-    <div class="d-flex align-center">
-      <v-select
-        class="pr-3 pt-5 mt-1"
-        v-model="select"
-        :items="items"
-        item-text="name"
-        item-value="id"
-        label="Seleccionar idioma"
-        dense
-        solo
-        return-object
-      ></v-select>
+    <div class="language-wrapper">
+      <LanguageSelectorComponent />
+    </div>
+    <div class="d-flex align-center mr-3">
       <v-badge
         class="mr-4"
         :content="messages"
@@ -40,23 +32,18 @@
 </template>
 <script>
 import MyProfileOptionsComponent from "./MyProfileOptionsComponent";
+import LanguageSelectorComponent from "./../shared/language-selector/LanguageSelectorComponent";
 export default {
   name: "HeaderComponent",
   components: {
     MyProfileOptionsComponent,
+    LanguageSelectorComponent,
   },
   data() {
     return {
       darkMode: false,
       messages: 1,
-      select: null,
       openMenuData: false,
-      items: [
-        { id: 1, name: "Español" },
-        { id: 2, name: "Català" },
-        { id: 3, name: "English" },
-        { id: 4, name: "Française" },
-      ],
     };
   },
   methods: {
@@ -67,3 +54,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.language-wrapper {
+  margin-top: 25px;
+  padding-right: 10px;
+}
+</style>

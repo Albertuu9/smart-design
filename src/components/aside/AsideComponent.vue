@@ -17,7 +17,7 @@
       </v-tooltip>
     </div>
     <div class="components-total pt-3 pl-5">
-    <small>Tienes 11 en total</small>
+    <small>11 en total</small>
     </div>
     <div class="d-flex components-container">
       <ListComponentsComponent />

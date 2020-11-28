@@ -1,0 +1,169 @@
+<template>
+  <div>
+    <div class="header-login-wrapper">
+      <div class="float-right pr-5">
+        <LanguageSelectorComponent />
+      </div>
+    </div>
+    <div class="login-wrapper d-flex flex-column justify-center align-center">
+      <form class="form-wrapper">
+        <div class="d-flex flex-row pb-4">
+          <span class="main-logo pr-3">SD</span>
+          <span class="main-title">SMARTDESIGN</span>
+        </div>
+        <label>Correo electrónico</label>
+        <v-text-field
+          v-model="email"
+          class="pt-1"
+          :error-messages="emailErrors"
+          required
+          single-line
+          outlined
+          append-icon="mdi-email"
+          dense
+          placeholder="Introduce tu correo electrónico"
+          :filled="!emailIsTouched"
+          color="success"
+          @input="$v.email.$touch()"
+          @focus="emailIsTouched = true"
+          @blur="
+            $v.email.$touch();
+            emailIsTouched = false;
+          "
+        ></v-text-field>
+        <label>Contraseña</label>
+        <small class="float-right label-remember-pass cpointer"
+          >¿Has olvidado tu contraseña?</small
+        >
+        <v-text-field
+          v-model="password"
+          class="pt-1"
+          :error-messages="passwordErrors"
+          placeholder="Introduce tu contraseña"
+          required
+          type="password"
+          single-line
+          outlined
+          dense
+          append-icon="mdi-lock"
+          :filled="!passIsTouched"
+          @input="$v.password.$touch()"
+          @focus="passIsTouched = true"
+          @blur="
+            $v.password.$touch();
+            passIsTouched = false;
+          "
+        ></v-text-field>
+
+        <v-btn
+          large
+          dense
+          block
+          class="mr-4 mt-3 mb-4 text-capitalize"
+          color="success"
+          @click="submit"
+        >
+          Iniciar sesión
+        </v-btn>
+        <div class="d-flex justify-center">
+          <small>O inicia sesión con</small>
+        </div>
+        <v-btn
+          large
+          dense
+          block
+          class="mr-4 mt-4 text-capitalize"
+          color="white"
+        >
+          <img src="./../../assets/img/btn-google-sign-in.svg" />
+          <span>Google</span>
+        </v-btn>
+        <div class="d-flex justify-center align-end wrapper-register-text">
+          <small
+            >¿Todavía no estás registrado?
+            <b class="cpointer text" @click="$router.push('/register')">¡hazlo aquí!</b></small
+          >
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+<script>
+import { validationMixin } from "vuelidate";
+import { required, maxLength, email } from "vuelidate/lib/validators";
+import LanguageSelectorComponent from "./../../components/shared/language-selector/LanguageSelectorComponent";
+export default {
+  mixins: [validationMixin],
+  components: {
+    LanguageSelectorComponent,
+  },
+  validations: {
+    email: { required, email },
+    password: { required },
+  },
+
+  data: () => ({
+    email: "",
+    password: "",
+    emailIsTouched: null,
+    passIsTouched: null,
+    items: ["español", "català"],
+  }),
+
+  computed: {
+    passwordErrors() {
+      const errors = [];
+      if (!this.$v.password.$dirty) return errors;
+      !this.$v.password.required && errors.push("La contraseña es requerida.");
+      return errors;
+    },
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.email.$dirty) return errors;
+      !this.$v.email.email && errors.push("Debe ser un correo válido");
+      !this.$v.email.required &&
+        errors.push("El correo electrónico es requerido");
+      return errors;
+    },
+  },
+
+  methods: {
+    submit() {
+      this.$v.$touch();
+    },
+    clear() {
+      this.$v.$reset();
+      this.password = "";
+      this.email = "";
+    },
+  },
+};
+</script>
+<style lang="scss" scoped>
+.login-wrapper {
+  height: calc(100vh - 100px);
+}
+.form-wrapper {
+  width: 40%;
+  max-width: 450px;
+  padding: 20px;
+  height: 500px;
+}
+.label-remember-pass:hover {
+  text-decoration: underline;
+}
+.header-login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0 auto;
+  height: 90px;
+  width: 95%;
+}
+.wrapper-register-text {
+  height: 100px;
+}
+.wrapper-register-text > small > b:hover {
+  text-decoration: underline;
+}
+</style>
