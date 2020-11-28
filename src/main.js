@@ -5,19 +5,15 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import './../public/styles/style.scss';
 import Vuelidate from 'vuelidate';
-import VueFlags from "@growthbunker/vueflags";
+import i18n from './i18n'
 
 Vue.config.productionTip = false
-
-Vue.use(VueFlags, {
-  // Specify the path of the folder where the flags are stored.
-  iconPath: './assets/img/flags',
-});
 
 new Vue({
   router,
   store,
   vuetify,
   Vuelidate,
+  i18n,
   render: h => h(App)
 }).$mount('#app')

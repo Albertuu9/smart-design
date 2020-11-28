@@ -17,7 +17,7 @@
         <form class="form-wrapper d-flex flex-column">
           <div class="d-flex align-center">
             <h4>
-              Regístrate para disfrutar de todas las ventajas de la plataforma.
+              {{ $t('register-page.title') }}
             </h4>
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
@@ -103,7 +103,7 @@
             <div class="d-flex flex-column mandatory-wrapper">
               <label>Tipo de usuario*</label>
               <v-select
-                class="pt-1 pr-2"
+                class="pt-1"
                 return-object
                 single-line
                 dense
@@ -155,10 +155,10 @@
                 :error-messages="passwordErrors"
                 placeholder="Introduce tu contraseña"
                 required
-                :type="showPassword ? 'text' : 'password'"
                 single-line
                 outlined
                 dense
+                :type="showPassword ? 'text' : 'password'"
                 :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                 :filled="!passIsTouched"
                 @click:append="showPassword = !showPassword"
@@ -247,7 +247,7 @@
 </template>
 <script>
 import { validationMixin } from "vuelidate";
-import { required, maxLength, email } from "vuelidate/lib/validators";
+import { required, maxLength, minLength, email } from "vuelidate/lib/validators";
 import LanguageSelectorComponent from "./../../components/shared/language-selector/LanguageSelectorComponent";
 import ServicesRegister from "./../../services/register/services";
 export default {
@@ -258,7 +258,7 @@ export default {
   validations: {
     name: { required },
     email: { required, email },
-    password: { required },
+    password: { required, minLength: minLength(8) },
     country: { required },
     user: { required },
   },
@@ -301,6 +301,7 @@ export default {
     passwordErrors() {
       const errors = [];
       if (!this.$v.password.$dirty) return errors;
+      !this.$v.password.minLength && errors.push("La longitud mínima es de 8 caracteres");
       !this.$v.password.required && errors.push("La contraseña es requerida.");
       return errors;
     },
