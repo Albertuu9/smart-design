@@ -1,5 +1,6 @@
 <template>
   <div class="d-flex">
+    <ModalComponent v-if="avatarModalObject.open" v-model="avatarModalObject.open" :width="avatarModalObject.width" :height="avatarModalObject.height" :title="avatarModalObject.title" :type="avatarModalObject.type" @emitData="getAvatarSelected"/>
     <div class="image-wrapper"></div>
     <div class="d-flex flex-column content-wrapper">
       <div
@@ -192,7 +193,7 @@
                     :value="2"
                   ></v-radio>
                 </v-radio-group>
-                <v-btn v-if="haveAvatar === 2" color="success" small>
+                <v-btn @click="avatarModalObject.open = true" v-if="haveAvatar === 2" color="success" small>
                   <v-icon small class="pr-2">mdi-drama-masks</v-icon>
                   <span class="text-capitalize">Seleccionar avatar</span>
                 </v-btn>
@@ -248,12 +249,15 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, maxLength, minLength, email } from "vuelidate/lib/validators";
+// components
 import LanguageSelectorComponent from "./../../components/shared/language-selector/LanguageSelectorComponent";
 import ServicesRegister from "./../../services/register/services";
+import ModalComponent from "./../../components/shared/modal/ModalComponent"
 export default {
   mixins: [validationMixin],
   components: {
     LanguageSelectorComponent,
+    ModalComponent
   },
   validations: {
     name: { required },
@@ -271,6 +275,13 @@ export default {
     country: "",
     user: "",
     countries: [],
+    avatarModalObject: {
+        open: false,
+        width: 900,
+        height: 900,
+        title: "Seleccionar avatar",
+        type: "avatar"
+    },
     haveAvatar: 1,
     userTypes: [
       {
@@ -346,6 +357,10 @@ export default {
       const searchText = queryText.toLowerCase();
 
       return textOne.indexOf(searchText) > -1;
+    },
+    // emit events
+    getAvatarSelected(avatar){
+      console.log('avatarr',avatar);
     },
     // services
     getCountries() {

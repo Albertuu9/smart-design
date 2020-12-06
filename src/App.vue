@@ -28,8 +28,8 @@ export default {
   created() {
     this.getCurrentPath();
   },
-  updated: function () {
-  this.$nextTick(function () {
+  updated () {
+  this.$nextTick(() => {
     this.currentUrl = this.$route.path;
   })
 },
