@@ -1,5 +1,6 @@
 <template>
   <div>
+    <ModalComponent v-if="recoverPasswordObject.open" v-model="recoverPasswordObject.open" :width="recoverPasswordObject.width" :height="recoverPasswordObject.height" :title="recoverPasswordObject.title" :type="recoverPasswordObject.type"/>
     <div class="header-login-wrapper">
       <div class="float-right pr-5">
         <LanguageSelectorComponent />
@@ -32,7 +33,7 @@
           "
         ></v-text-field>
         <label>Contraseña</label>
-        <small class="float-right label-remember-pass cpointer"
+        <small @click="recoverPasswordObject.open = true" class="float-right label-remember-pass cpointer"
           >¿Has olvidado tu contraseña?</small
         >
         <v-text-field
@@ -92,10 +93,12 @@
 import { validationMixin } from "vuelidate";
 import { required, maxLength, email } from "vuelidate/lib/validators";
 import LanguageSelectorComponent from "./../../components/shared/language-selector/LanguageSelectorComponent";
+import ModalComponent from "./../../components/shared/modal/ModalComponent"
 export default {
   mixins: [validationMixin],
   components: {
     LanguageSelectorComponent,
+    ModalComponent
   },
   validations: {
     email: { required, email },
@@ -105,9 +108,15 @@ export default {
   data: () => ({
     email: "",
     password: "",
+    recoverPasswordObject: {
+        open: false,
+        width: 500,
+        height: 900,
+        title: "Recuperar contraseña",
+        type: "password"
+    },
     emailIsTouched: null,
-    passIsTouched: null,
-    items: ["español", "català"],
+    passIsTouched: null
   }),
 
   computed: {

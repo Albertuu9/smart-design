@@ -21,7 +21,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" text @click="saveData">
-          I accept
+          Aceptar
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -29,6 +29,7 @@
 </template>
 <script>
 import AvatarSelectionComponent from "./../avatar-selection/AvatarSelectionComponent";
+import RecoverPasswordModalComponent from "./../../login/RecoverPasswordModal";
 export default {
   name: "ModalComponent",
   props: {
@@ -56,7 +57,7 @@ export default {
   data() {
     return {
       currentComponent: null,
-      avatarSelected: null
+      returnData: null,
     };
   },
   created() {
@@ -68,19 +69,22 @@ export default {
         case "avatar":
           this.currentComponent = AvatarSelectionComponent;
           break;
+        case "password":
+          this.currentComponent = RecoverPasswordModalComponent;
+          break;
       }
     },
     closeModal() {
       this.$emit("input", false);
     },
-    saveData(avatar) {
-        this.$emit("emitData", this.avatarSelected);
-        this.closeModal();
+    saveData(data) {
+      this.$emit("emitData", this.returnData);
+      this.closeModal();
     },
     // emit events
-    getEmitData(avatar){
-        this.avatarSelected = avatar;
-    }
+    getEmitData(data) {
+      this.returnData = data;
+    },
   },
 };
 </script>

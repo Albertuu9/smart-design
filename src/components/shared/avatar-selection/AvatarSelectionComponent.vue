@@ -237,7 +237,7 @@ export default {
 .row-avatar-wrapper {
   width: 100%;
   height: 100px;
-  margin: 0px 120px 0px 120px;
+  margin: 0px 80px 0px 80px;
 }
 .avatar-image {
   width: 70px;
