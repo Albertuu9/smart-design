@@ -1,6 +1,14 @@
 <template>
   <div class="d-flex">
-    <ModalComponent v-if="avatarModalObject.open" v-model="avatarModalObject.open" :width="avatarModalObject.width" :height="avatarModalObject.height" :title="avatarModalObject.title" :type="avatarModalObject.type" @emitData="getAvatarSelected"/>
+    <ModalComponent
+      v-if="avatarModalObject.open"
+      v-model="avatarModalObject.open"
+      :width="avatarModalObject.width"
+      :height="avatarModalObject.height"
+      :title="avatarModalObject.title"
+      :type="avatarModalObject.type"
+      @emitData="getAvatarSelected"
+    />
     <div class="image-wrapper"></div>
     <div class="d-flex flex-column content-wrapper">
       <div
@@ -18,7 +26,7 @@
         <form class="form-wrapper d-flex flex-column">
           <div class="d-flex align-center">
             <h4>
-              {{ $t('register-page.title') }}
+              {{ $t("register-page.title") }}
             </h4>
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
@@ -87,7 +95,7 @@
                 :error-messages="countryErrors"
                 :items="countries"
                 :filled="!countryIsTouched"
-                :filter="customFilter"
+                :filter="countriesFilter"
                 @input="$v.country.$touch()"
                 @focus="countryIsTouched = true"
                 @blur="
@@ -193,20 +201,26 @@
                     :value="2"
                   ></v-radio>
                 </v-radio-group>
-                <v-btn @click="avatarModalObject.open = true" v-if="haveAvatar === 2" color="success" small>
+                <v-btn
+                  @click="avatarModalObject.open = true"
+                  v-if="haveAvatar === 2"
+                  color="success"
+                  small
+                >
                   <v-icon small class="pr-2">mdi-drama-masks</v-icon>
                   <span class="text-capitalize">Seleccionar avatar</span>
                 </v-btn>
               </div>
             </div>
           </div>
+          <p v-if="text">{{ text }}</p>
           <v-btn
             large
             dense
             block
             class="mr-4 mt-3 mb-4 text-capitalize"
             color="success"
-            @click="submit"
+            @click="saveUser()"
           >
             Regístrate
           </v-btn>
@@ -217,6 +231,7 @@
             dark
             class="mr-4 mt-3 mb-4 text-capitalize"
             :color="'#cccccc'"
+            @click="loginGuest()"
           >
             Acceder como invitado
           </v-btn>
@@ -248,16 +263,22 @@
 </template>
 <script>
 import { validationMixin } from "vuelidate";
-import { required, maxLength, minLength, email } from "vuelidate/lib/validators";
+import {
+  required,
+  maxLength,
+  minLength,
+  email,
+} from "vuelidate/lib/validators";
 // components
 import LanguageSelectorComponent from "./../../components/shared/language-selector/LanguageSelectorComponent";
+import ModalComponent from "./../../components/shared/modal/ModalComponent";
+// services
 import ServicesRegister from "./../../services/register/services";
-import ModalComponent from "./../../components/shared/modal/ModalComponent"
 export default {
   mixins: [validationMixin],
   components: {
     LanguageSelectorComponent,
-    ModalComponent
+    ModalComponent,
   },
   validations: {
     name: { required },
@@ -275,12 +296,14 @@ export default {
     country: "",
     user: "",
     countries: [],
+    text: "",
+    avatar: "",
     avatarModalObject: {
-        open: false,
-        width: 900,
-        height: 900,
-        title: "Seleccionar avatar",
-        type: "avatar"
+      open: false,
+      width: 900,
+      height: 900,
+      title: "Seleccionar avatar",
+      type: "avatar",
     },
     haveAvatar: 1,
     userTypes: [
@@ -312,7 +335,8 @@ export default {
     passwordErrors() {
       const errors = [];
       if (!this.$v.password.$dirty) return errors;
-      !this.$v.password.minLength && errors.push("La longitud mínima es de 8 caracteres");
+      !this.$v.password.minLength &&
+        errors.push("La longitud mínima es de 8 caracteres");
       !this.$v.password.required && errors.push("La contraseña es requerida.");
       return errors;
     },
@@ -324,10 +348,12 @@ export default {
     },
     emailErrors() {
       const errors = [];
+      let promises = [];
       if (!this.$v.email.$dirty) return errors;
       !this.$v.email.email && errors.push("Debe ser un correo válido");
       !this.$v.email.required &&
         errors.push("El correo electrónico es requerido");
+
       return errors;
     },
     userTypeErrors() {
@@ -341,26 +367,27 @@ export default {
     this.getCountries();
   },
   methods: {
-    submit() {
-      console.log("sssss", this.surname);
+    saveUser() {
       this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.checkMailExists(this.email).then((response) => {
+          if (response.data.code === 200) {
+            this.saveNewUser();
+          } else {
+            this.$toast.error("Este correo ya existe en la plataforma, por favor introduce otro");
+          }
+        });
+      }
     },
-    clear() {
-      this.$v.$reset();
-      this.password = "";
-      this.name = "";
-      this.email = "";
-      this.country = "";
-    },
-    customFilter(item, queryText) {
+    countriesFilter(item, queryText) {
       const textOne = item.name.toLowerCase();
       const searchText = queryText.toLowerCase();
 
       return textOne.indexOf(searchText) > -1;
     },
     // emit events
-    getAvatarSelected(avatar){
-      console.log('avatarr',avatar);
+    getAvatarSelected(avatar) {
+      this.avatar = avatar;
     },
     // services
     getCountries() {
@@ -371,6 +398,40 @@ export default {
         .catch((error) => {
           return error;
         });
+    },
+    checkMailExists(email) {
+      let payload = {
+        email: email,
+      };
+      return ServicesRegister.checkMailExists(payload);
+    },
+    saveNewUser() {
+      let payload = {
+        name: this.name,
+        surname: this.surname,
+        country: this.country.name,
+        userType: this.user.text,
+        email: this.email,
+        password: this.password,
+        avatar: this.avatar,
+      };
+      ServicesRegister.saveNewUser(payload).then((response) => {
+        if (response.data.code === 200) {
+          this.$toast.success("Usuario registrado correctamente");
+          setTimeout(() => {
+            this.$router.push("/login");
+          }, 3000);
+        } else {
+            this.$toast.error("Ha habido un error en el servidor, contacta con agf.smartdesign@gmail.com");
+        }
+      });
+    },
+    loginGuest() {
+      ServicesRegister.loginGuest().then((response) => {
+        localStorage.setItem('user',JSON.stringify(response.data.user));
+        localStorage.setItem('token',JSON.stringify(response.data.token));
+        this.$router.push('/home');
+      });
     },
   },
 };

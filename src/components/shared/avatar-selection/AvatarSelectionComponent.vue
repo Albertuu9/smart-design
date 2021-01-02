@@ -25,7 +25,7 @@
         >
           <div>
             <img
-              :id="avatar.id"
+              :id="avatar._id"
               @click="selectAvatar(avatar)"
               :class="
                 avatar.type === 'standard'
@@ -34,7 +34,7 @@
                   ? 'premium-block-image'
                   : 'premium-image'
               "
-              :src="avatar.image"
+              :src="avatar.path"
             />
             <img
               class="avatar-block"
@@ -48,120 +48,39 @@
   </div>
 </template>
 <script>
+import AvatarsServices from "./../../../services/avatars/services"
 export default {
   name: "AvatarSelectionComponent",
   data() {
     return {
       selectedAvatarsCategory: 0,
       avatarsLoaded: [],
-      premiums: [
-        {
-          id: 1,
-          name: "mario",
-          image: require("./../../../assets/avatars/mario.png"),
-          type: "premium",
-          block: true,
-        },
-        {
-          id: 2,
-          name: "luigi",
-          image: require("./../../../assets/avatars/luigi.png"),
-          type: "premium",
-          block: true,
-        },
-        {
-          id: 3,
-          name: "peach",
-          image: require("./../../../assets/avatars/peach.png"),
-          type: "premium",
-          block: true
-        },
-        {
-          id: 4,
-          name: "daisy",
-          image: require("./../../../assets/avatars/daisy.png"),
-          type: "premium",
-          block: true
-        },
-        {
-          id: 5,
-          name: "wario",
-          image: require("./../../../assets/avatars/wario.png"),
-          type: "premium",
-          block: true,
-        },
-        {
-          id: 6,
-          name: "waluigi",
-          image: require("./../../../assets/avatars/waluigi.png"),
-          type: "premium",
-          block: true,
-        },
-        {
-          id: 7,
-          name: "pacman",
-          image: require("./../../../assets/avatars/pacman.png"),
-          type: "premium",
-          block: true,
-        },
-        {
-          id: 8,
-          name: "bowser",
-          image: require("./../../../assets/avatars/bowser.png"),
-          type: "premium",
-          block: true
-        },
-      ],
-      avatars: [
-        {
-          id: 1,
-          name: "bear",
-          image: require("./../../../assets/avatars/bear.png"),
-          type: "standard",
-        },
-        {
-          id: 2,
-          name: "monkey",
-          image: require("./../../../assets/avatars/monkey.png"),
-          type: "standard",
-        },
-        {
-          id: 3,
-          name: "polar",
-          image: require("./../../../assets/avatars/polar.png"),
-          type: "standard",
-        },
-        {
-          id: 4,
-          name: "cat",
-          image: require("./../../../assets/avatars/cat.png"),
-          type: "standard",
-        },
-        {
-          id: 5,
-          name: "dog",
-          image: require("./../../../assets/avatars/dog.png"),
-          type: "standard",
-        },
-        {
-          id: 6,
-          name: "owl",
-          image: require("./../../../assets/avatars/owl.png"),
-          type: "standard",
-        },
-        {
-          id: 7,
-          name: "pig",
-          image: require("./../../../assets/avatars/pig.png"),
-          type: "standard",
-        },
-      ],
+      premiums: [],
+      avatars: [],
+      currentPath: ''
     };
   },
+  mounted(){
+    this.currentPath = this.$router.currentRoute.path;
+  },
   created() {
-    this.showAvatarsWrapper();
+    this.loadData();
   },
   methods: {
+    loadData(){
+      this.loadAvatars().then((response) => {
+        this.premiums = response.data.filter(avatar => avatar.type === 'premium');
+        this.avatars = response.data.filter(avatar => avatar.type === 'standard');
+        if(this.currentPath === '/register') {
+          this.premiums.forEach((premium) => {
+            premium.block = true;
+          })
+        } // else if(this.currentPath !== '/register' && ) {
+          // falta comprobar si el usuario es premium o no, si no es premium bloquear los avatares de "pago"
+        // }
+        this.showAvatarsWrapper();
+      })
+    },
     selectAvatar(avatar) {
       if (!avatar.block) {
         let selectedClass = "";
@@ -174,13 +93,13 @@ export default {
         let listAvatars = [];
         listAvatars = this.checkAvatars(avatar);
         listAvatars.forEach((item, index) => {
-          if (avatar.id === item.id) {
+          if (avatar._id === item._id) {
             document
-              .getElementById(avatar.id)
+              .getElementById(avatar._id)
               .setAttribute("class", selectedClass);
           }
         });
-        this.$emit("emitData", avatar);
+        this.$emit("emitData", avatar._id);
       }
     },
     resetAvatarSelected(avatar) {
@@ -197,8 +116,8 @@ export default {
       listAvatars = this.checkAvatars(avatar);
       listAvatars.forEach((avatar) => {
         if (!avatar.block) {
-          document.getElementById(avatar.id).setAttribute("class", iconClass);
-          document.getElementById(avatar.id).removeAttribute(selectedClass);
+          document.getElementById(avatar._id).setAttribute("class", iconClass);
+          document.getElementById(avatar._id).removeAttribute(selectedClass);
         }
       });
     },
@@ -219,6 +138,10 @@ export default {
       }
       return listAvatars;
     },
+    // services
+    loadAvatars(){
+      return AvatarsServices.loadAvatars();
+    }
   },
 };
 </script>

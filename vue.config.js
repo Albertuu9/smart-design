@@ -3,6 +3,10 @@ module.exports = {
     "vuetify"
   ],
 
+  configureWebpack: {
+    devtool: 'source-map',
+  },
+
   devServer: {
     proxy: 'http://localhost:8080'
   },

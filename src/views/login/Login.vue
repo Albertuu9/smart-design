@@ -92,8 +92,11 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, maxLength, email } from "vuelidate/lib/validators";
+// components
 import LanguageSelectorComponent from "./../../components/shared/language-selector/LanguageSelectorComponent";
-import ModalComponent from "./../../components/shared/modal/ModalComponent"
+import ModalComponent from "./../../components/shared/modal/ModalComponent";
+// services
+import ServicesLogin from "./../../services/login/services";
 export default {
   mixins: [validationMixin],
   components: {
@@ -139,12 +142,29 @@ export default {
   methods: {
     submit() {
       this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.login();
+      }
     },
-    clear() {
-      this.$v.$reset();
-      this.password = "";
-      this.email = "";
-    },
+    // services
+    login(){
+      let payload = {
+        email: this.email,
+        password: this.password
+      }
+      ServicesLogin.login(payload).then((response) => {
+        if(response.data.code === 200) {
+          // save user credentials on localStorage and vuex
+          localStorage.setItem('user',JSON.stringify(response.data.user));
+          localStorage.setItem('token',JSON.stringify(response.data.token));
+          this.$store.commit('setUser',response.data.user);
+          this.$store.commit('setToken',response.data.token);
+          this.$router.push('/home');
+        } else {
+          this.$toast.error("El usuario o la contraseña son incorrectos");
+        }
+      })
+    }
   },
 };
 </script>

@@ -1,5 +1,6 @@
 <template>
   <v-menu
+    class="menuu"
     :close-on-content-click="false"
     bottom
     min-width="200px"
@@ -7,17 +8,21 @@
     offset-y
   >
     <template v-slot:activator="{ on }">
-      <v-avatar class="cpointer" color="brown" size="36" v-on="on">
-        <span class="white--text">AG</span>
+      <v-avatar class="cpointer" color="white" size="36" v-on="on">
+        <img
+          class="profile-icon"
+          src="https://i.ibb.co/XxMyTMm/guest6.png"
+        />
       </v-avatar>
     </template>
     <v-card max-width="300" class="mx-auto pa-3">
       <div class="d-flex align-center pb-3">
+        <v-avatar class="cpointer" color="white" size="72">
         <img
           class="profile-icon"
-          src="https://cdn.vuetifyjs.com/images/john.jpg"
-          width="72"
+          src="https://i.ibb.co/XxMyTMm/guest6.png"
         />
+      </v-avatar>
         <div class="d-flex flex-column pl-3">
           <v-chip class="membership" small color="primary">
             miembro standard
@@ -34,6 +39,7 @@
           v-for="(item, i) in items"
           :key="i"
           :disabled="item.disabled"
+          @click="setOptions(item.id)"
         >
           <v-list-item-icon>
             <v-icon v-text="item.icon"></v-icon>
@@ -43,11 +49,6 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <v-divider></v-divider>
-      <div class="d-flex justify-center align-center">
-        <label class="subtitle-2 pr-3">Modo oscuro: </label>
-        <v-switch v-model="darkMode" color="info"></v-switch>
-      </div>
     </v-card>
   </v-menu>
 </template>
@@ -58,13 +59,33 @@ export default {
     return {
       darkMode: null,
       items: [
-        { text: "Mi perfil", icon: "mdi-account", disabled: false },
-        { text: "Mis proyectos", icon: "mdi-archive", disabled: false },
-        { text: "Hazte premium", icon: "mdi-star-check", disabled: true },
-        { text: "Cerrar sesión", icon: "mdi-power", disabled: false },
+        { id: 1, text: "Mi perfil", icon: "mdi-account", disabled: false },
+        { id: 2, text: "Mis proyectos", icon: "mdi-archive", disabled: false },
+        { id: 3, text: "Hazte premium", icon: "mdi-star-check", disabled: true },
+        { id: 4, text: "Cerrar sesión", icon: "mdi-power", disabled: false },
       ],
     };
   },
+  methods: {
+    setOptions(id){
+      switch(id) {
+        case 1:
+        break;
+        case 2:
+        break;
+        case 3:
+        break;
+        case 4:
+          this.closeSession();
+        break; 
+      }
+    },
+    closeSession(){
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      this.$router.push('/login');
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -85,4 +106,5 @@ export default {
 .v-switch >>> .v-label {
   font-size: 14px !important;
 }
+
 </style>

@@ -46,6 +46,19 @@ export default {
       openMenuData: false,
     };
   },
+  beforeCreate() {
+    if (localStorage.getItem("user")) {
+      this.$store.commit("setUser", JSON.parse(localStorage.getItem("user")));
+    }
+    if (localStorage.getItem("token")) {
+      this.$store.commit("setToken", JSON.parse(localStorage.getItem("token")));
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
+  },
   methods: {
     openMenu() {
       this.openMenuData = !this.openMenuData;

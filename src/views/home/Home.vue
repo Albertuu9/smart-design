@@ -5,7 +5,17 @@
 </template>
 <script>
 export default {
-    name: 'Home'
+    name: 'Home',
+    data(){
+        return {
+
+        }
+    },
+    computed: {
+        user () {
+            return this.$store.getters.getUser
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
