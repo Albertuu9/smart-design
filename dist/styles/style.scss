@@ -1,0 +1,55 @@
+@font-face {
+    font-family: myFirstFont;
+    src: url('./../../src/assets/fonts/Zian\ free\ promo.ttf');
+  }
+
+.cpointer{
+    cursor: pointer;
+}
+
+small{
+    color: #757575;
+}
+
+.disabled{
+    opacity: 0.35;
+}
+
+.link-no-decoration{
+    text-decoration: none;
+}
+
+.link-no-decoration > h3 {
+    color: #fefefe;
+}
+
+form > label{
+    font-size: 16px;
+    color: #777777;
+}
+
+.v-text-field{
+    font-size: 14px;
+    border: .5px;
+}
+
+.main-logo{
+    font-family: myFirstFont;
+    color: #5bc0de;
+    font-size: 25px;
+    font-style: italic;
+}
+
+.main-title{
+    font-family: myFirstFont;
+    font-size: 25px;
+    font-style: italic;
+}
+
+*{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    @media only screen and (max-width: 1020px) {
+        display: none;
+    }
+}
+

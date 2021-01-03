@@ -69,7 +69,7 @@
         <div class="d-flex justify-center">
           <small>O inicia sesión con</small>
         </div>
-        <v-btn
+        <!-- <v-btn
           large
           dense
           block
@@ -78,7 +78,8 @@
         >
           <img src="./../../assets/img/btn-google-sign-in.svg" />
           <span>Google</span>
-        </v-btn>
+        </v-btn> -->
+        <GoogleLogin :params="params" :onSuccess="onSuccess" :onFailure="onFailure">Login</GoogleLogin>
         <div class="d-flex justify-center align-end wrapper-register-text">
           <small
             >¿Todavía no estás registrado?
@@ -95,13 +96,15 @@ import { required, maxLength, email } from "vuelidate/lib/validators";
 // components
 import LanguageSelectorComponent from "./../../components/shared/language-selector/LanguageSelectorComponent";
 import ModalComponent from "./../../components/shared/modal/ModalComponent";
+import GoogleLogin from 'vue-google-login';
 // services
 import ServicesLogin from "./../../services/login/services";
 export default {
   mixins: [validationMixin],
   components: {
     LanguageSelectorComponent,
-    ModalComponent
+    ModalComponent,
+    GoogleLogin
   },
   validations: {
     email: { required, email },
@@ -117,6 +120,15 @@ export default {
         height: 900,
         title: "Recuperar contraseña",
         type: "password"
+    },
+    params: {
+        client_id: "429593289097-dt8vm4n536lr913pki565fskc6jrc78j.apps.googleusercontent.com"
+    },
+    // only needed if you want to render the button with the google ui
+    renderParams: {
+      width: 250,
+      height: 50,
+      longtitle: true
     },
     emailIsTouched: null,
     passIsTouched: null
@@ -164,6 +176,15 @@ export default {
           this.$toast.error("El usuario o la contraseña son incorrectos");
         }
       })
+    },
+    onSuccess(googleUser) {
+      console.log('success', googleUser);
+
+      // This only gets the user information: id, name, imageUrl and email
+      console.log(googleUser.getBasicProfile());
+    },
+    onFailure(error) {
+      console.log('error', error);
     }
   },
 };
