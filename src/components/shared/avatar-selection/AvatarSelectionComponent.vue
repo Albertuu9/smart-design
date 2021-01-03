@@ -3,7 +3,7 @@
     <div class="d-flex justify-center">
       <v-btn-toggle
         v-model="selectedAvatarsCategory"
-        @change="showAvatarsWrapper"
+        @change="showAvatarsWrapper()"
         rounded
       >
         <v-btn small class="text-capitalize">
@@ -149,7 +149,7 @@ export default {
 .body-wrapper {
   width: 100%;
   margin-top: 10px;
-  height: 380px;
+  height: 320px;
   overflow: auto;
 }
 .avatar-wrapper {

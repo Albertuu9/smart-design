@@ -439,6 +439,7 @@ export default {
 <style lang="scss" scoped>
 .register-wrapper {
   height: calc(100vh - 110px);
+  overflow: auto;
 }
 .form-wrapper {
   margin: 0 auto;
