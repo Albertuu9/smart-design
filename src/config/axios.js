@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 const HTTP = axios.create({
-  baseURL: 'http://localhost:7777',
+  // baseURL: 'http://localhost:7777',
+  baseURL: 'https://api-smartdesign.herokuapp.com',
   headers: {
     'Content-Type': 'application/json',
   }
