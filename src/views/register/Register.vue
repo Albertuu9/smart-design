@@ -467,6 +467,7 @@ export default {
 }
 .content-wrapper {
   width: 40%;
+  overflow-y: hidden;
   @media only screen and (max-width: 1300px) {
     width: 60%;
   }

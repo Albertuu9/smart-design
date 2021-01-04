@@ -79,7 +79,10 @@
           <img src="./../../assets/img/btn-google-sign-in.svg" />
           <span>Google</span>
         </v-btn> -->
-        <GoogleLogin :params="params" :onSuccess="onSuccess" :onFailure="onFailure">Login</GoogleLogin>
+        <GoogleLogin class="google-btn" :params="params" :onSuccess="onSuccess" :onFailure="onFailure">
+          <img src="./../../assets/img/btn-google-sign-in.svg" />
+          <span>Google</span>
+        </GoogleLogin>
         <div class="d-flex justify-center align-end wrapper-register-text">
           <small
             >¿Todavía no estás registrado?
@@ -181,7 +184,7 @@ export default {
       console.log('success', googleUser);
 
       // This only gets the user information: id, name, imageUrl and email
-      console.log(googleUser.getBasicProfile());
+      console.log(googleUser.getBasicProfile().getEmail());
     },
     onFailure(error) {
       console.log('error', error);
@@ -215,5 +218,16 @@ export default {
 }
 .wrapper-register-text > small > b:hover {
   text-decoration: underline;
+}
+.google-btn {
+  background-color: white;
+  width: 100%;
+  border: .5px solid #dedede;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  padding: 6px;
 }
 </style>
