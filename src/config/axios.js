@@ -2,7 +2,8 @@ import axios from 'axios'
 
 const HTTP = axios.create({
   // prod: process.env.VUE_APP_PROD_URL,
-  baseURL: process.env.VUE_APP_DEV_URL,
+  // dev: process.env.VUE_APP_DEV_URL,
+  baseURL: process.env.VUE_APP_PROD_URL,
   headers: {
     'Content-Type': 'application/json',
   }
