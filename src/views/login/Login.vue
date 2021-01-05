@@ -102,6 +102,7 @@ import ModalComponent from "./../../components/shared/modal/ModalComponent";
 import GoogleLogin from 'vue-google-login';
 // services
 import ServicesLogin from "./../../services/login/services";
+import ServicesGoogle from "./../../services/google/services";
 export default {
   mixins: [validationMixin],
   components: {
@@ -169,22 +170,40 @@ export default {
       }
       ServicesLogin.login(payload).then((response) => {
         if(response.data.code === 200) {
-          // save user credentials on localStorage and vuex
-          localStorage.setItem('user',JSON.stringify(response.data.user));
-          localStorage.setItem('token',JSON.stringify(response.data.token));
-          this.$store.commit('setUser',response.data.user);
-          this.$store.commit('setToken',response.data.token);
-          this.$router.push('/home');
+          this.saveLoginData();
         } else {
           this.$toast.error("El usuario o la contraseña son incorrectos");
         }
       })
     },
+    loginGoogle(email){
+      let payload = {
+        email: email
+      }
+      ServicesGoogle.loginGoogle(payload).then((response) => {
+        if(response.data.code === 200) {
+          localStorage.setItem('googleLogin', true);
+          this.saveLoginData();
+        } else {
+          this.$toast.error("UPS! parece que este email no existe o se ha producido un error, vuelve a intentarlo");
+        }
+      })
+    },
+    saveLoginData() {
+      // save user credentials on localStorage and vuex
+      localStorage.setItem('user',JSON.stringify(response.data.user));
+      localStorage.setItem('token',JSON.stringify(response.data.token));
+      this.$store.commit('setUser',response.data.user);
+      this.$store.commit('setToken',response.data.token);
+      this.$router.push('/home');
+    },
     onSuccess(googleUser) {
-      console.log('success', googleUser);
+     // console.log('success', googleUser);
 
       // This only gets the user information: id, name, imageUrl and email
-      console.log(googleUser.getBasicProfile().getEmail());
+      // console.log(googleUser.getBasicProfile().getEmail());
+      let email = googleUser.getBasicProfile().getEmail();
+      this.loginGoogle(email);
     },
     onFailure(error) {
       console.log('error', error);
