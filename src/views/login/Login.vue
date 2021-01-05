@@ -128,12 +128,6 @@ export default {
     params: {
         client_id: "429593289097-dt8vm4n536lr913pki565fskc6jrc78j.apps.googleusercontent.com"
     },
-    // only needed if you want to render the button with the google ui
-    renderParams: {
-      width: 250,
-      height: 50,
-      longtitle: true
-    },
     emailIsTouched: null,
     passIsTouched: null
   }),
@@ -170,7 +164,7 @@ export default {
       }
       ServicesLogin.login(payload).then((response) => {
         if(response.data.code === 200) {
-          this.saveLoginData();
+          this.saveLoginData(response);
         } else {
           this.$toast.error("El usuario o la contraseña son incorrectos");
         }
@@ -183,13 +177,13 @@ export default {
       ServicesGoogle.loginGoogle(payload).then((response) => {
         if(response.data.code === 200) {
           localStorage.setItem('googleLogin', true);
-          this.saveLoginData();
+          this.saveLoginData(response);
         } else {
           this.$toast.error("UPS! parece que este email no existe o se ha producido un error, vuelve a intentarlo");
         }
       })
     },
-    saveLoginData() {
+    saveLoginData(response) {
       // save user credentials on localStorage and vuex
       localStorage.setItem('user',JSON.stringify(response.data.user));
       localStorage.setItem('token',JSON.stringify(response.data.token));
