@@ -164,27 +164,18 @@ export default {
 }
 .avatar-image {
   width: 70px;
-  opacity: 0.6;
   cursor: pointer;
-}
-.avatar-image:hover {
-  opacity: 1;
 }
 .avatar-selection-wrapper {
   max-height: 500px;
   height: 100%;
-  background-color: #eee;
+  background-color: #f4f4f4;
 }
 .premium-image {
-  opacity: 0.6;
   width: 80px;
   cursor: pointer;
 }
-.premium-image:hover {
-  opacity: 1;
-}
 .premium-block-image {
-  opacity: 0.6;
   width: 80px;
   filter: grayscale(100%);
 }

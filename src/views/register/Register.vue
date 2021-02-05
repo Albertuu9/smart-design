@@ -6,6 +6,7 @@
       :width="avatarModalObject.width"
       :height="avatarModalObject.height"
       :title="avatarModalObject.title"
+      :icon="avatarModalObject.icon"
       :type="avatarModalObject.type"
       @emitData="getAvatarSelected"
     />
@@ -22,25 +23,12 @@
           <LanguageSelectorComponent class="mt-2" />
         </div>
       </div>
-      <div class="register-wrapper d-flex mt-3">
-        <form class="form-wrapper d-flex flex-column">
+      <div class="register-wrapper d-flex">
+        <form class="form-wrapper d-flex flex-column" @submit.prevent>
           <div class="d-flex align-center">
-            <h4>
-              {{ $t("register-page.title") }}
-            </h4>
-            <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  v-bind="attrs"
-                  v-on="on"
-                  small
-                  color="info"
-                  class="pl-1 cpointer"
-                  >mdi-information</v-icon
-                >
-              </template>
-              <span>Haz click para ver las ventajas de registrarse</span>
-            </v-tooltip>
+            <h2>
+              Regístrate
+            </h2>
           </div>
           <div class="mt-5 d-flex flex-row align-center justify-space-between">
             <div class="d-flex flex-column mandatory-wrapper">
@@ -104,7 +92,7 @@
                 "
               >
                 <template class="countries-wrapper" v-slot:item="{ item }">
-                  <img width="40" class="pr-2" :src="item.flag" />
+                  <img width="30" class="pr-2" :src="item.flag" />
                   <span>{{ item.name }}</span>
                 </template>
               </v-autocomplete>
@@ -208,7 +196,8 @@
                   small
                 >
                   <v-icon small class="pr-2">mdi-drama-masks</v-icon>
-                  <span class="text-capitalize">Seleccionar avatar</span>
+                  <span v-if="!avatar" class="text-capitalize">Seleccionar avatar</span>
+                  <span v-else class="text-capitalize">Cambiar avatar</span>
                 </v-btn>
               </div>
             </div>
@@ -303,6 +292,7 @@ export default {
       width: 900,
       height: 900,
       title: "Seleccionar avatar",
+      icon: "mdi-drama-masks",
       type: "avatar",
     },
     haveAvatar: 1,
@@ -372,9 +362,9 @@ export default {
       if (!this.$v.$invalid) {
         this.checkMailExists(this.email).then((response) => {
           if (response.data.code === 200) {
-            this.saveNewUser();
-          } else {
             this.$toast.error("Este correo ya existe en la plataforma, por favor introduce otro");
+          } else {
+            this.saveNewUser();
           }
         });
       }
@@ -388,6 +378,7 @@ export default {
     // emit events
     getAvatarSelected(avatar) {
       this.avatar = avatar;
+      console.log('avatar', this.avatar);
     },
     // services
     getCountries() {
@@ -425,6 +416,9 @@ export default {
             this.$toast.error("Ha habido un error en el servidor, contacta con agf.smartdesign@gmail.com");
         }
       });
+    },
+    saveGoogleUser() {
+      
     },
     loginGuest() {
       ServicesRegister.loginGuest().then((response) => {

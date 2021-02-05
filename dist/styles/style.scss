@@ -1,7 +1,4 @@
-@font-face {
-    font-family: myFirstFont;
-    src: url('./../../src/assets/fonts/Zian\ free\ promo.ttf');
-  }
+@import './fonts.scss';
 
 .cpointer{
     cursor: pointer;
@@ -19,6 +16,10 @@ small{
     text-decoration: none;
 }
 
+.modal-title{
+    font-family: $mainFont;
+}
+
 .link-no-decoration > h3 {
     color: #fefefe;
 }
@@ -34,14 +35,14 @@ form > label{
 }
 
 .main-logo{
-    font-family: myFirstFont;
+    font-family: $mainFont;
     color: #5bc0de;
     font-size: 25px;
     font-style: italic;
 }
 
 .main-title{
-    font-family: myFirstFont;
+    font-family: $mainFont;
     font-size: 25px;
     font-style: italic;
 }

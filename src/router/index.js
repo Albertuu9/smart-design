@@ -49,7 +49,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
@@ -77,7 +77,7 @@ router.beforeEach((to, from, next) => {
           } 
       } else {
         if(accessPage) {
-          router.go(-1);
+          router.push('/home');
           return;
         } else {
           next();

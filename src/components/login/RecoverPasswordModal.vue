@@ -1,60 +1,72 @@
 <template>
-  <div class="d-flex justify-center flex-column align-center">
-    <form class="form-wrapper">
-      <label>Correo electrónico</label>
-      <v-text-field
-        v-model="email"
-        class="pt-1"
-        :error-messages="emailErrors"
-        required
-        single-line
-        outlined
-        append-icon="mdi-email"
-        dense
-        placeholder="Introduce tu correo electrónico"
-        :filled="!emailIsTouched"
-        color="success"
-        @input="$v.email.$touch()"
-        @focus="emailIsTouched = true"
-        @blur="
-          $v.email.$touch();
-          emailIsTouched = false;
-        "
-      ></v-text-field>
-      <v-icon small class="pr-2">mdi-alert-rhombus</v-icon>
-      <small>Vas a recibir un enlace en tu correo para poder recuperar la contraseña</small>
-    </form>
-  </div>
+  <v-stepper v-model="currentStep">
+    <v-stepper-header>
+      <v-stepper-step color="success" :complete="currentStep > 1" step="1">
+        Validar correo
+      </v-stepper-step>
+
+      <v-divider></v-divider>
+
+      <v-stepper-step color="success" :complete="currentStep > 2" step="2">
+        Validar código
+      </v-stepper-step>
+
+      <v-divider></v-divider>
+
+      <v-stepper-step color="success" step="3">
+        Crear nueva contraseña
+      </v-stepper-step>
+    </v-stepper-header>
+
+    <v-stepper-items>
+      <v-stepper-content step="1">
+        <MailValidationComponent @goStep="moveBySteps" @getUser="sendVerification"/>
+      </v-stepper-content>
+
+      <v-stepper-content step="2">
+        <CodeValidationComponent v-if="currentStep >= 2" :user="user" @goStep="moveBySteps"/>
+      </v-stepper-content>
+
+      <v-stepper-content step="3">
+        <NewPasswordComponent v-if="currentStep >= 3" :user="user" @close="closeModal"/>
+      </v-stepper-content>
+    </v-stepper-items>
+  </v-stepper>
 </template>
 <script>
-import { validationMixin } from "vuelidate";
-import { required, email } from "vuelidate/lib/validators";
+// components
+import MailValidationComponent from './recoverPasswordStepper/MailValidationComponent';
+import CodeValidationComponent from './recoverPasswordStepper/CodeValidationComponent';
+import NewPasswordComponent from './recoverPasswordStepper/NewPasswordComponent';
+
 export default {
   name: "RecoverPasswordModal",
-  mixins: [validationMixin],
-  validations: {
-    email: { required, email }
+  components:{
+    MailValidationComponent,
+    CodeValidationComponent,
+    NewPasswordComponent
   },
-
   data: () => ({
-    email: "",
-    emailIsTouched: null,
+    currentStep: 1,
+    userId: null
   }),
 
-  computed: {
-    emailErrors() {
-      const errors = [];
-      if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push("Debe ser un correo válido");
-      !this.$v.email.required &&
-        errors.push("El correo electrónico es requerido");
-      return errors;
-    },
-  },
-
   methods: {
-    submit() {
-      this.$v.$touch();
+    // emit events
+    moveBySteps(sign){
+      if(sign === '+'){
+        this.currentStep++;
+      } else {
+        this.currentStep--;
+      }
+    },
+    sendVerification(data){
+      this.user = data;
+    },
+    closeModal(event){
+      if(event){
+        this.$emit('emitData');
+      }
     }
   },
 };
@@ -62,6 +74,14 @@ export default {
 <style lang="scss" scoped>
 .form-wrapper {
   width: 100%;
-  padding: 20px;
+}
+.v-stepper{
+  box-shadow: none;
+  border-radius: 0px;
+}
+.v-stepper__header{
+  box-shadow: none;
+  background-color: #efefef;
+  border-radius: 0px;
 }
 </style>

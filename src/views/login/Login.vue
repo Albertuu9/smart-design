@@ -1,13 +1,21 @@
 <template>
   <div>
-    <ModalComponent v-if="recoverPasswordObject.open" v-model="recoverPasswordObject.open" :width="recoverPasswordObject.width" :height="recoverPasswordObject.height" :title="recoverPasswordObject.title" :type="recoverPasswordObject.type"/>
+    <ModalComponent
+      v-if="recoverPasswordObject.open"
+      v-model="recoverPasswordObject.open"
+      :width="recoverPasswordObject.width"
+      :height="recoverPasswordObject.height"
+      :title="recoverPasswordObject.title"
+      :icon="recoverPasswordObject.icon"
+      :type="recoverPasswordObject.type"
+    />
     <div class="header-login-wrapper">
       <div class="float-right pr-5">
         <LanguageSelectorComponent />
       </div>
     </div>
     <div class="login-wrapper d-flex flex-column justify-center align-center">
-      <form class="form-wrapper">
+      <form class="form-wrapper" @submit.prevent>
         <div class="d-flex flex-row pb-4">
           <span class="main-logo pr-3">SD</span>
           <span class="main-title">SMARTDESIGN</span>
@@ -33,7 +41,9 @@
           "
         ></v-text-field>
         <label>Contraseña</label>
-        <small @click="recoverPasswordObject.open = true" class="float-right label-remember-pass cpointer"
+        <small
+          @click="recoverPasswordObject.open = true"
+          class="float-right label-remember-pass cpointer"
           >¿Has olvidado tu contraseña?</small
         >
         <v-text-field
@@ -69,24 +79,21 @@
         <div class="d-flex justify-center">
           <small>O inicia sesión con</small>
         </div>
-        <!-- <v-btn
-          large
-          dense
-          block
-          class="mr-4 mt-4 text-capitalize"
-          color="white"
+        <GoogleLogin
+          class="google-btn"
+          :params="params"
+          :onSuccess="onSuccess"
+          :onFailure="onFailure"
         >
-          <img src="./../../assets/img/btn-google-sign-in.svg" />
-          <span>Google</span>
-        </v-btn> -->
-        <GoogleLogin class="google-btn" :params="params" :onSuccess="onSuccess" :onFailure="onFailure">
           <img src="./../../assets/img/btn-google-sign-in.svg" />
           <span>Google</span>
         </GoogleLogin>
         <div class="d-flex justify-center align-end wrapper-register-text">
           <small
             >¿Todavía no estás registrado?
-            <b class="cpointer text" @click="$router.push('/register')">¡hazlo aquí!</b></small
+            <b class="cpointer text" @click="$router.push('/register')"
+              >¡hazlo aquí!</b
+            ></small
           >
         </div>
       </form>
@@ -99,7 +106,7 @@ import { required, maxLength, email } from "vuelidate/lib/validators";
 // components
 import LanguageSelectorComponent from "./../../components/shared/language-selector/LanguageSelectorComponent";
 import ModalComponent from "./../../components/shared/modal/ModalComponent";
-import GoogleLogin from 'vue-google-login';
+import GoogleLogin from "vue-google-login";
 // services
 import ServicesLogin from "./../../services/login/services";
 import ServicesGoogle from "./../../services/google/services";
@@ -108,7 +115,7 @@ export default {
   components: {
     LanguageSelectorComponent,
     ModalComponent,
-    GoogleLogin
+    GoogleLogin,
   },
   validations: {
     email: { required, email },
@@ -119,17 +126,18 @@ export default {
     email: "",
     password: "",
     recoverPasswordObject: {
-        open: false,
-        width: 500,
-        height: 900,
-        title: "Recuperar contraseña",
-        type: "password"
+      open: false,
+      width: 600,
+      height: 900,
+      title: "Recuperar contraseña",
+      icon: "mdi-lock-question",
+      type: "password",
     },
     params: {
-        client_id: "429593289097-dt8vm4n536lr913pki565fskc6jrc78j.apps.googleusercontent.com"
+      client_id: process.env.VUE_APP_CLIENT_ID,
     },
     emailIsTouched: null,
-    passIsTouched: null
+    passIsTouched: null,
   }),
 
   computed: {
@@ -157,42 +165,44 @@ export default {
       }
     },
     // services
-    login(){
+    login() {
       let payload = {
         email: this.email,
-        password: this.password
-      }
+        password: this.password,
+      };
       ServicesLogin.login(payload).then((response) => {
-        if(response.data.code === 200) {
+        if (response.data.code === 200) {
           this.saveLoginData(response);
         } else {
           this.$toast.error("El usuario o la contraseña son incorrectos");
         }
-      })
+      });
     },
-    loginGoogle(email){
+    loginGoogle(email) {
       let payload = {
-        email: email
-      }
+        email: email,
+      };
       ServicesGoogle.loginGoogle(payload).then((response) => {
-        if(response.data.code === 200) {
-          localStorage.setItem('googleLogin', true);
+        if (response.data.code === 200) {
+          localStorage.setItem("googleLogin", true);
           this.saveLoginData(response);
         } else {
-          this.$toast.error("UPS! parece que este email no existe o se ha producido un error, vuelve a intentarlo");
+          this.$toast.error(
+            "UPS! parece que este email no existe o se ha producido un error, vuelve a intentarlo"
+          );
         }
-      })
+      });
     },
     saveLoginData(response) {
       // save user credentials on localStorage and vuex
-      localStorage.setItem('user',JSON.stringify(response.data.user));
-      localStorage.setItem('token',JSON.stringify(response.data.token));
-      this.$store.commit('setUser',response.data.user);
-      this.$store.commit('setToken',response.data.token);
-      this.$router.push('/home');
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("token", JSON.stringify(response.data.token));
+      this.$store.commit("setUser", response.data.user);
+      this.$store.commit("setToken", response.data.token);
+      this.$router.push("/home");
     },
     onSuccess(googleUser) {
-     // console.log('success', googleUser);
+      // console.log('success', googleUser);
 
       // This only gets the user information: id, name, imageUrl and email
       // console.log(googleUser.getBasicProfile().getEmail());
@@ -200,8 +210,8 @@ export default {
       this.loginGoogle(email);
     },
     onFailure(error) {
-      console.log('error', error);
-    }
+      console.log("error", error);
+    },
   },
 };
 </script>
@@ -235,7 +245,7 @@ export default {
 .google-btn {
   background-color: white;
   width: 100%;
-  border: .5px solid #dedede;
+  border: 0.5px solid #dedede;
   margin-top: 10px;
   display: flex;
   align-items: center;

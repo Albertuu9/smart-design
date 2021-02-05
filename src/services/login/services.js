@@ -16,7 +16,31 @@ const ServicesLogin = {
         }).catch((error) => {
             return error
         })
-    }
+    },
+
+    sendRecoverPasswordCode(payload) {
+        return HTTP.post('/sendRecoverPasswordCode', payload).then((response) => {
+            return response
+        }).catch((error) => {
+            return error
+        })
+    },
+
+    checkCodeIsValid(payload) {
+        return HTTP.post('/checkCodeExists', payload).then((response) => {
+            return response
+        }).catch((error) => {
+            return error
+        })
+    },
+
+    updatePassword(payload) {
+        return HTTP.post('/changePassword', payload).then((response) => {
+            return response
+        }).catch((error) => {
+            return error
+        })
+    },
 
 }
 
