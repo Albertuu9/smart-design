@@ -79,6 +79,7 @@
                 clearable
                 placeholder="Selecciona tu país"
                 item-text="name"
+                item-value="alpha2Code"
                 v-model="country"
                 :error-messages="countryErrors"
                 :items="countries"
@@ -196,7 +197,9 @@
                   small
                 >
                   <v-icon small class="pr-2">mdi-drama-masks</v-icon>
-                  <span v-if="!avatar" class="text-capitalize">Seleccionar avatar</span>
+                  <span v-if="!avatar" class="text-capitalize"
+                    >Seleccionar avatar</span
+                  >
                   <span v-else class="text-capitalize">Cambiar avatar</span>
                 </v-btn>
               </div>
@@ -207,7 +210,7 @@
             large
             dense
             block
-            class="mr-4 mt-3 mb-4 text-capitalize"
+            class="mr-4 mt-3 mb-4 text-capitalize register-btn"
             color="success"
             @click="saveUser()"
           >
@@ -218,7 +221,7 @@
             dense
             block
             dark
-            class="mr-4 mt-3 mb-4 text-capitalize"
+            class="mr-4 mt-3 mb-4 text-capitalize register-btn"
             :color="'#cccccc'"
             @click="loginGuest()"
           >
@@ -227,16 +230,15 @@
           <div class="d-flex justify-center">
             <small>O regístrate con</small>
           </div>
-          <v-btn
-            large
-            dense
-            block
-            class="mr-4 mt-4 mb-5 text-capitalize"
-            color="white"
+          <GoogleLogin
+            class="google-btn"
+            :params="params"
+            :onSuccess="onSuccess"
+            :onFailure="onFailure"
           >
             <img src="./../../assets/img/btn-google-sign-in.svg" />
             <span>Google</span>
-          </v-btn>
+          </GoogleLogin>
           <div class="d-flex footer-text align-center justify-center">
             <small
               >¿Ya tienes una cuenta?
@@ -258,6 +260,7 @@ import {
   minLength,
   email,
 } from "vuelidate/lib/validators";
+import ServicesLogin from "../../services/login/services";
 // components
 import LanguageSelectorComponent from "./../../components/shared/language-selector/LanguageSelectorComponent";
 import ModalComponent from "./../../components/shared/modal/ModalComponent";
@@ -287,6 +290,7 @@ export default {
     countries: [],
     text: "",
     avatar: "",
+    userIp: null,
     avatarModalObject: {
       open: false,
       width: 900,
@@ -353,21 +357,44 @@ export default {
       return errors;
     },
   },
-  created() {
-    this.getCountries();
-  },
+  created() {},
   methods: {
     saveUser() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.checkMailExists(this.email).then((response) => {
           if (response.data.code === 200) {
-            this.$toast.error("Este correo ya existe en la plataforma, por favor introduce otro");
+            this.$toast.error(
+              "Este correo ya existe en la plataforma, por favor introduce otro"
+            );
           } else {
             this.saveNewUser();
           }
         });
       }
+    },
+    loadData() {
+      this.getCountries();
+      let promises = [];
+      promises.push(this.getUserIp());
+      Promise.all(promises).then(() => {
+        this.getUserCountryByIp(this.userIp);
+      });
+    },
+    getUserIp() {
+      ServicesRegister.getUserIp().then((response) => {
+        console.log("ip", response);
+        this.userIp = response.data.ip;
+      });
+    },
+    getUserCountryByIp(ip) {
+      let payload = {
+        ip: ip,
+      };
+      ServicesRegister.getUserCountryByIp(ip).then((response) => {
+        console.log("country", response);
+        this.country.alpha2Code = response.data.data.country;
+      });
     },
     countriesFilter(item, queryText) {
       const textOne = item.name.toLowerCase();
@@ -378,7 +405,6 @@ export default {
     // emit events
     getAvatarSelected(avatar) {
       this.avatar = avatar;
-      console.log('avatar', this.avatar);
     },
     // services
     getCountries() {
@@ -400,7 +426,7 @@ export default {
       let payload = {
         name: this.name,
         surname: this.surname,
-        country: this.country.name,
+        country: this.country.alpha2Code,
         userType: this.user.text,
         email: this.email,
         password: this.password,
@@ -409,22 +435,62 @@ export default {
       ServicesRegister.saveNewUser(payload).then((response) => {
         if (response.data.code === 200) {
           this.$toast.success("Usuario registrado correctamente");
-          setTimeout(() => {
-            this.$router.push("/login");
-          }, 3000);
+          // save user credentials on localStorage and vuex
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          localStorage.setItem("token", JSON.stringify(response.data.token));
+          this.$store.commit("setUser", response.data.user);
+          this.$store.commit("setToken", response.data.token);
+          this.$router.push("/home");
         } else {
-            this.$toast.error("Ha habido un error en el servidor, contacta con agf.smartdesign@gmail.com");
+          this.$toast.error(
+            "Ha habido un error en el servidor, contacta con agf.smartdesign@gmail.com"
+          );
         }
       });
     },
+    onSuccess(googleUser) {
+      // console.log('success', googleUser);
+
+      // This only gets the user information: id, name, imageUrl and email
+      // console.log(googleUser.getBasicProfile().getEmail());
+      let name = profile.getName();
+      let email = googleUser.getBasicProfile().getEmail();
+      console.log('nameeee', name);
+      this.saveGoogleUser(name, email);
+    },
+    onFailure(error) {
+      console.log("error", error);
+    },
     saveGoogleUser() {
-      
+      let payload = {
+        name: name,
+        country: this.country.alpha2Code,
+        email: email,
+        method: "google",
+      };
+      ServicesRegister.saveNewUser(payload).then((response) => {
+        if (response.data.code === 200) {
+          this.$toast.success("Usuario registrado correctamente");
+          // save user credentials on localStorage and vuex
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          localStorage.setItem("token", JSON.stringify(response.data.token));
+          this.$store.commit("setUser", response.data.user);
+          this.$store.commit("setToken", response.data.token);
+          this.$router.push("/home");
+        } else {
+          this.$toast.error(
+            "Ha habido un error en el servidor, contacta con agf.smartdesign@gmail.com"
+          );
+        }
+      });
     },
     loginGuest() {
       ServicesRegister.loginGuest().then((response) => {
-        localStorage.setItem('user',JSON.stringify(response.data.user));
-        localStorage.setItem('token',JSON.stringify(response.data.token));
-        this.$router.push('/home');
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        localStorage.setItem("token", JSON.stringify(response.data.token));
+        this.$store.commit("setUser", response.data.user);
+        this.$store.commit("setToken", response.data.token);
+        this.$router.push("/home");
       });
     },
   },
@@ -447,6 +513,9 @@ export default {
 }
 .mandatory-wrapper {
   width: 100%;
+}
+.register-btn {
+  max-height: 44px;
 }
 .image-wrapper {
   background-image: url("../../assets/img/fondo1.jpg");
