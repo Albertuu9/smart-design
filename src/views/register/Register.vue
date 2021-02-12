@@ -231,7 +231,7 @@
             <small>O regístrate con</small>
           </div>
           <GoogleLogin
-            class="google-btn"
+            class="google-btn cpointer"
             :params="params"
             :onSuccess="onSuccess"
             :onFailure="onFailure"
@@ -260,10 +260,10 @@ import {
   minLength,
   email,
 } from "vuelidate/lib/validators";
-import ServicesLogin from "../../services/login/services";
 // components
 import LanguageSelectorComponent from "./../../components/shared/language-selector/LanguageSelectorComponent";
 import ModalComponent from "./../../components/shared/modal/ModalComponent";
+import GoogleLogin from "vue-google-login";
 // services
 import ServicesRegister from "./../../services/register/services";
 export default {
@@ -271,6 +271,7 @@ export default {
   components: {
     LanguageSelectorComponent,
     ModalComponent,
+    GoogleLogin
   },
   validations: {
     name: { required },
@@ -290,7 +291,6 @@ export default {
     countries: [],
     text: "",
     avatar: "",
-    userIp: null,
     avatarModalObject: {
       open: false,
       width: 900,
@@ -298,6 +298,9 @@ export default {
       title: "Seleccionar avatar",
       icon: "mdi-drama-masks",
       type: "avatar",
+    },
+    params: {
+      client_id: process.env.VUE_APP_CLIENT_ID,
     },
     haveAvatar: 1,
     userTypes: [
@@ -357,7 +360,9 @@ export default {
       return errors;
     },
   },
-  created() {},
+  created() {
+    this.loadData();
+  },
   methods: {
     saveUser() {
       this.$v.$touch();
@@ -375,25 +380,20 @@ export default {
     },
     loadData() {
       this.getCountries();
-      let promises = [];
-      promises.push(this.getUserIp());
-      Promise.all(promises).then(() => {
-        this.getUserCountryByIp(this.userIp);
-      });
+      this.getUserIp();
     },
     getUserIp() {
-      ServicesRegister.getUserIp().then((response) => {
-        console.log("ip", response);
-        this.userIp = response.data.ip;
+      ServicesRegister.getClientIp().then((response) => {
+        let ip = response.data.ip;
+        this.getUserCountryByIp(ip);
       });
     },
     getUserCountryByIp(ip) {
       let payload = {
         ip: ip,
       };
-      ServicesRegister.getUserCountryByIp(ip).then((response) => {
-        console.log("country", response);
-        this.country.alpha2Code = response.data.data.country;
+      ServicesRegister.getUserCountryByIp(payload).then((response) => {
+        this.country = response.data.data.country;
       });
     },
     countriesFilter(item, queryText) {
@@ -426,7 +426,7 @@ export default {
       let payload = {
         name: this.name,
         surname: this.surname,
-        country: this.country.alpha2Code,
+        country: this.country,
         userType: this.user.text,
         email: this.email,
         password: this.password,
@@ -453,18 +453,17 @@ export default {
 
       // This only gets the user information: id, name, imageUrl and email
       // console.log(googleUser.getBasicProfile().getEmail());
-      let name = profile.getName();
+      let name = googleUser.getBasicProfile().getName();
       let email = googleUser.getBasicProfile().getEmail();
-      console.log('nameeee', name);
       this.saveGoogleUser(name, email);
     },
     onFailure(error) {
       console.log("error", error);
     },
-    saveGoogleUser() {
+    saveGoogleUser(name, email) {
       let payload = {
         name: name,
-        country: this.country.alpha2Code,
+        country: this.country,
         email: email,
         method: "google",
       };
@@ -488,6 +487,7 @@ export default {
       ServicesRegister.loginGuest().then((response) => {
         localStorage.setItem("user", JSON.stringify(response.data.user));
         localStorage.setItem("token", JSON.stringify(response.data.token));
+        localStorage.setItem("googleLogin", true);
         this.$store.commit("setUser", response.data.user);
         this.$store.commit("setToken", response.data.token);
         this.$router.push("/home");
@@ -543,5 +543,16 @@ export default {
 }
 .footer-text {
   height: 10%;
+}
+.google-btn {
+  background-color: white;
+  width: 100%;
+  border: 0.5px solid #dedede;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  padding: 6px;
 }
 </style>

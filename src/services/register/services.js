@@ -12,6 +12,13 @@ const ServicesRegister = {
       return error
     })
   },
+  getClientIp(){
+    return HTTP.get('https://api.ipify.org/?format=json').then((response) => {
+      return response
+    }).catch((error) => {
+      return error
+    })
+  },
   checkMailExists(payload) {
     return HTTP.post('/checkMail', payload).then((response) => {
       return response
