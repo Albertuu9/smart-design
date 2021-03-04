@@ -24,212 +24,216 @@
         </div>
       </div>
       <div class="register-wrapper d-flex">
-        <form class="form-wrapper d-flex flex-column" @submit.prevent>
-          <div class="d-flex align-center">
-            <h2>
-              Regístrate
-            </h2>
-          </div>
-          <div class="mt-5 d-flex flex-row align-center justify-space-between">
-            <div class="d-flex flex-column mandatory-wrapper">
-              <label>Nombre*</label>
-              <v-text-field
-                v-model="name"
-                class="pt-1 pr-2"
-                :error-messages="nameErrors"
-                required
-                single-line
-                outlined
-                dense
-                placeholder="Introduce tu nombre"
-                color="success"
-                :filled="!nameIsTouched"
-                @input="$v.name.$touch()"
-                @focus="nameIsTouched = true"
-                @blur="
-                  $v.name.$touch();
-                  nameIsTouched = false;
-                "
-              ></v-text-field>
+        <div class="form-wrapper">
+          <form class="d-flex flex-column" @submit.prevent>
+            <div class="d-flex align-center">
+              <h2>
+                Regístrate
+              </h2>
             </div>
-            <div class="d-flex flex-column mandatory-wrapper">
-              <label>Apellidos</label>
-              <v-text-field
-                class="pt-1"
-                v-model="surname"
-                placeholder="Introduce tus apellidos"
-                single-line
-                outlined
-                dense
-                :filled="!surnameIsTouched"
-                @focus="surnameIsTouched = true"
-                @blur="surnameIsTouched = false"
-              ></v-text-field>
-            </div>
-          </div>
-          <div class="d-flex flex-row align-center justify-space-between">
-            <div class="d-flex flex-column mandatory-wrapper">
-              <label>País*</label>
-              <v-autocomplete
-                class="pt-1 pr-2"
-                return-object
-                single-line
-                dense
-                outlined
-                clearable
-                placeholder="Selecciona tu país"
-                item-text="name"
-                item-value="alpha2Code"
-                v-model="country"
-                :error-messages="countryErrors"
-                :items="countries"
-                :filled="!countryIsTouched"
-                :filter="countriesFilter"
-                @input="$v.country.$touch()"
-                @focus="countryIsTouched = true"
-                @blur="
-                  $v.country.$touch();
-                  countryIsTouched = false;
-                "
-              >
-                <template class="countries-wrapper" v-slot:item="{ item }">
-                  <img width="30" class="pr-2" :src="item.flag" />
-                  <span>{{ item.name }}</span>
-                </template>
-              </v-autocomplete>
-            </div>
-            <div class="d-flex flex-column mandatory-wrapper">
-              <label>Tipo de usuario*</label>
-              <v-select
-                class="pt-1"
-                return-object
-                single-line
-                dense
-                outlined
-                clearable
-                placeholder="Selecciona tipo de usuario"
-                item-text="text"
-                v-model="user"
-                :error-messages="userTypeErrors"
-                :items="userTypes"
-                :filled="!userTypeIsTouched"
-                @input="$v.user.$touch()"
-                @focus="userTypeIsTouched = true"
-                @blur="
-                  $v.user.$touch();
-                  userTypeIsTouched = false;
-                "
-              >
-              </v-select>
-            </div>
-          </div>
-          <div class="d-flex flex-row align-center justify-space-between">
-            <div class="d-flex flex-column mandatory-wrapper">
-              <label>Correo electrónico*</label>
-              <v-text-field
-                v-model="email"
-                class="pt-1 pr-2"
-                :error-messages="emailErrors"
-                required
-                single-line
-                outlined
-                dense
-                placeholder="Introduce tu correo electrónico"
-                :filled="!emailIsTouched"
-                color="success"
-                @input="$v.email.$touch()"
-                @focus="emailIsTouched = true"
-                @blur="
-                  $v.email.$touch();
-                  emailIsTouched = false;
-                "
-              ></v-text-field>
-            </div>
-            <div class="d-flex flex-column mandatory-wrapper">
-              <label>Contraseña*</label>
-              <v-text-field
-                class="pt-1"
-                v-model="password"
-                :error-messages="passwordErrors"
-                placeholder="Introduce tu contraseña"
-                required
-                single-line
-                outlined
-                dense
-                :type="showPassword ? 'text' : 'password'"
-                :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
-                :filled="!passIsTouched"
-                @click:append="showPassword = !showPassword"
-                @input="$v.password.$touch()"
-                @focus="passIsTouched = true"
-                @blur="
-                  $v.password.$touch();
-                  passIsTouched = false;
-                "
-              ></v-text-field>
-            </div>
-          </div>
-          <div class="d-flex flex-row align-center justify-space-between">
-            <div class="d-flex flex-column mandatory-wrapper">
-              <label>Avatar</label>
-              <div class="d-flex align-center justify-space-between">
-                <v-radio-group
-                  v-model="haveAvatar"
+            <div
+              class="mt-5 d-flex flex-row align-center justify-space-between"
+            >
+              <div class="d-flex flex-column mandatory-wrapper">
+                <label>Nombre*</label>
+                <v-text-field
+                  v-model="name"
+                  class="pt-1 pr-2"
+                  :error-messages="nameErrors"
+                  required
+                  single-line
+                  outlined
+                  dense
+                  placeholder="Introduce tu nombre"
                   color="success"
-                  mandatory
-                  row
-                >
-                  <v-radio
-                    color="success"
-                    label="Sin avatar"
-                    :value="1"
-                  ></v-radio>
-                  <v-radio
-                    color="success"
-                    label="Con avatar"
-                    :value="2"
-                  ></v-radio>
-                </v-radio-group>
-                <v-btn
-                  @click="avatarModalObject.open = true"
-                  v-if="haveAvatar === 2"
-                  color="success"
-                  small
-                >
-                  <v-icon small class="pr-2">mdi-drama-masks</v-icon>
-                  <span v-if="!avatar" class="text-capitalize"
-                    >Seleccionar avatar</span
-                  >
-                  <span v-else class="text-capitalize">Cambiar avatar</span>
-                </v-btn>
+                  :filled="!nameIsTouched"
+                  @input="$v.name.$touch()"
+                  @focus="nameIsTouched = true"
+                  @blur="
+                    $v.name.$touch();
+                    nameIsTouched = false;
+                  "
+                ></v-text-field>
+              </div>
+              <div class="d-flex flex-column mandatory-wrapper">
+                <label>Apellidos</label>
+                <v-text-field
+                  class="pt-1"
+                  v-model="surname"
+                  placeholder="Introduce tus apellidos"
+                  single-line
+                  outlined
+                  dense
+                  :filled="!surnameIsTouched"
+                  @focus="surnameIsTouched = true"
+                  @blur="surnameIsTouched = false"
+                ></v-text-field>
               </div>
             </div>
-          </div>
-          <p v-if="text">{{ text }}</p>
-          <v-btn
-            large
-            dense
-            block
-            class="mr-4 mt-3 mb-4 text-capitalize register-btn"
-            color="success"
-            @click="saveUser()"
-          >
-            Regístrate
-          </v-btn>
-          <v-btn
-            large
-            dense
-            block
-            dark
-            class="mr-4 mt-3 mb-4 text-capitalize register-btn"
-            :color="'#cccccc'"
-            @click="loginGuest()"
-          >
-            Acceder como invitado
-          </v-btn>
-          <div class="d-flex justify-center">
-            <small>O regístrate con</small>
-          </div>
+            <div class="d-flex flex-row align-center justify-space-between">
+              <div class="d-flex flex-column mandatory-wrapper">
+                <label>País*</label>
+                <v-autocomplete
+                  class="pt-1 pr-2"
+                  return-object
+                  single-line
+                  dense
+                  outlined
+                  clearable
+                  placeholder="Selecciona tu país"
+                  item-text="name"
+                  item-value="alpha2Code"
+                  v-model="country"
+                  :error-messages="countryErrors"
+                  :items="countries"
+                  :filled="!countryIsTouched"
+                  :filter="countriesFilter"
+                  @input="$v.country.$touch()"
+                  @focus="countryIsTouched = true"
+                  @blur="
+                    $v.country.$touch();
+                    countryIsTouched = false;
+                  "
+                >
+                  <template class="countries-wrapper" v-slot:item="{ item }">
+                    <img width="30" class="pr-2" :src="item.flag" />
+                    <span>{{ item.name }}</span>
+                  </template>
+                </v-autocomplete>
+              </div>
+              <div class="d-flex flex-column mandatory-wrapper">
+                <label>Tipo de usuario*</label>
+                <v-select
+                  class="pt-1"
+                  return-object
+                  single-line
+                  dense
+                  outlined
+                  clearable
+                  placeholder="Selecciona tipo de usuario"
+                  item-text="text"
+                  v-model="user"
+                  :error-messages="userTypeErrors"
+                  :items="userTypes"
+                  :filled="!userTypeIsTouched"
+                  @input="$v.user.$touch()"
+                  @focus="userTypeIsTouched = true"
+                  @blur="
+                    $v.user.$touch();
+                    userTypeIsTouched = false;
+                  "
+                >
+                </v-select>
+              </div>
+            </div>
+            <div class="d-flex flex-row align-center justify-space-between">
+              <div class="d-flex flex-column mandatory-wrapper">
+                <label>Correo electrónico*</label>
+                <v-text-field
+                  v-model="email"
+                  class="pt-1 pr-2"
+                  :error-messages="emailErrors"
+                  required
+                  single-line
+                  outlined
+                  dense
+                  placeholder="Introduce tu correo electrónico"
+                  :filled="!emailIsTouched"
+                  color="success"
+                  @input="$v.email.$touch()"
+                  @focus="emailIsTouched = true"
+                  @blur="
+                    $v.email.$touch();
+                    emailIsTouched = false;
+                  "
+                ></v-text-field>
+              </div>
+              <div class="d-flex flex-column mandatory-wrapper">
+                <label>Contraseña*</label>
+                <v-text-field
+                  class="pt-1"
+                  v-model="password"
+                  :error-messages="passwordErrors"
+                  placeholder="Introduce tu contraseña"
+                  required
+                  single-line
+                  outlined
+                  dense
+                  :type="showPassword ? 'text' : 'password'"
+                  :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                  :filled="!passIsTouched"
+                  @click:append="showPassword = !showPassword"
+                  @input="$v.password.$touch()"
+                  @focus="passIsTouched = true"
+                  @blur="
+                    $v.password.$touch();
+                    passIsTouched = false;
+                  "
+                ></v-text-field>
+              </div>
+            </div>
+            <div class="d-flex flex-row align-center justify-space-between">
+              <div class="d-flex flex-column mandatory-wrapper">
+                <label>Avatar</label>
+                <div class="d-flex align-center justify-space-between">
+                  <v-radio-group
+                    v-model="haveAvatar"
+                    color="success"
+                    mandatory
+                    row
+                  >
+                    <v-radio
+                      color="success"
+                      label="Sin avatar"
+                      :value="1"
+                    ></v-radio>
+                    <v-radio
+                      color="success"
+                      label="Con avatar"
+                      :value="2"
+                    ></v-radio>
+                  </v-radio-group>
+                  <v-btn
+                    @click="avatarModalObject.open = true"
+                    v-if="haveAvatar === 2"
+                    color="success"
+                    small
+                  >
+                    <v-icon small class="pr-2">mdi-drama-masks</v-icon>
+                    <span v-if="!avatar" class="text-capitalize"
+                      >Seleccionar avatar</span
+                    >
+                    <span v-else class="text-capitalize">Cambiar avatar</span>
+                  </v-btn>
+                </div>
+              </div>
+            </div>
+            <p v-if="text">{{ text }}</p>
+            <v-btn
+              large
+              dense
+              block
+              class="mr-4 mt-3 mb-4 text-capitalize register-btn"
+              color="success"
+              @click="saveUser()"
+            >
+              Regístrate
+            </v-btn>
+            <v-btn
+              large
+              dense
+              block
+              dark
+              class="mr-4 mt-3 mb-4 text-capitalize register-btn"
+              :color="'#cccccc'"
+              @click="loginGuest()"
+            >
+              Acceder como invitado
+            </v-btn>
+            <div class="d-flex justify-center">
+              <small>O regístrate con</small>
+            </div>
+          </form>
           <GoogleLogin
             class="google-btn cpointer"
             :params="params"
@@ -247,7 +251,7 @@
               ></small
             >
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
@@ -271,7 +275,7 @@ export default {
   components: {
     LanguageSelectorComponent,
     ModalComponent,
-    GoogleLogin
+    GoogleLogin,
   },
   validations: {
     name: { required },
@@ -435,12 +439,7 @@ export default {
       ServicesRegister.saveNewUser(payload).then((response) => {
         if (response.data.code === 200) {
           this.$toast.success("Usuario registrado correctamente");
-          // save user credentials on localStorage and vuex
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-          localStorage.setItem("token", JSON.stringify(response.data.token));
-          this.$store.commit("setUser", response.data.user);
-          this.$store.commit("setToken", response.data.token);
-          this.$router.push("/home");
+          this.saveLoginData(response);
         } else {
           this.$toast.error(
             "Ha habido un error en el servidor, contacta con agf.smartdesign@gmail.com"
@@ -470,12 +469,7 @@ export default {
       ServicesRegister.saveNewUser(payload).then((response) => {
         if (response.data.code === 200) {
           this.$toast.success("Usuario registrado correctamente");
-          // save user credentials on localStorage and vuex
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-          localStorage.setItem("token", JSON.stringify(response.data.token));
-          this.$store.commit("setUser", response.data.user);
-          this.$store.commit("setToken", response.data.token);
-          this.$router.push("/home");
+          this.saveLoginData(response);
         } else {
           this.$toast.error(
             "Ha habido un error en el servidor, contacta con agf.smartdesign@gmail.com"
@@ -485,13 +479,16 @@ export default {
     },
     loginGuest() {
       ServicesRegister.loginGuest().then((response) => {
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        localStorage.setItem("token", JSON.stringify(response.data.token));
-        localStorage.setItem("googleLogin", true);
-        this.$store.commit("setUser", response.data.user);
-        this.$store.commit("setToken", response.data.token);
-        this.$router.push("/home");
+        this.saveLoginData(response);
       });
+    },
+    saveLoginData(response) {
+      // save user credentials on localStorage and vuex
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("token", JSON.stringify(response.data.token));
+      this.$store.commit("setUser", response.data.user);
+      this.$store.commit("setToken", response.data.token);
+      this.$router.push("/home");
     },
   },
 };

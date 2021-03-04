@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Home from './../views/home/Home'
 import Login from './../views/login/Login'
 import Register from './../views/register/Register'
+import SocialLogin from './../views/social/SocialLogin'
 // services
 import ServicesLogin from './../services/login/services'
 
@@ -34,6 +35,14 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/socialLogin',
+    name: 'SocialLogin',
+    component: SocialLogin,
     meta: {
       requiresAuth: false
     }

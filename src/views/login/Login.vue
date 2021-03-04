@@ -15,72 +15,74 @@
       </div>
     </div>
     <div class="login-wrapper d-flex flex-column justify-center align-center">
-      <form class="form-wrapper" @submit.prevent>
-        <div class="d-flex flex-row pb-4">
-          <span class="main-logo pr-3">SD</span>
-          <span class="main-title">SMARTDESIGN</span>
-        </div>
-        <label>Correo electrónico</label>
-        <v-text-field
-          v-model="email"
-          class="pt-1"
-          :error-messages="emailErrors"
-          required
-          single-line
-          outlined
-          append-icon="mdi-email"
-          dense
-          placeholder="Introduce tu correo electrónico"
-          :filled="!emailIsTouched"
-          color="success"
-          @input="$v.email.$touch()"
-          @focus="emailIsTouched = true"
-          @blur="
-            $v.email.$touch();
-            emailIsTouched = false;
-          "
-        ></v-text-field>
-        <label>Contraseña</label>
-        <small
-          @click="recoverPasswordObject.open = true"
-          class="float-right label-remember-pass cpointer"
-          >¿Has olvidado tu contraseña?</small
-        >
-        <v-text-field
-          v-model="password"
-          class="pt-1"
-          :error-messages="passwordErrors"
-          placeholder="Introduce tu contraseña"
-          required
-          type="password"
-          single-line
-          outlined
-          dense
-          append-icon="mdi-lock"
-          :filled="!passIsTouched"
-          @input="$v.password.$touch()"
-          @focus="passIsTouched = true"
-          @blur="
-            $v.password.$touch();
-            passIsTouched = false;
-          "
-        ></v-text-field>
+      <div class="form-wrapper">
+        <form @submit.prevent>
+          <div class="d-flex flex-row pb-4">
+            <span class="main-logo pr-3">SD</span>
+            <span class="main-title">SMARTDESIGN</span>
+          </div>
+          <label>Correo electrónico</label>
+          <v-text-field
+            v-model="email"
+            class="pt-1"
+            :error-messages="emailErrors"
+            required
+            single-line
+            outlined
+            append-icon="mdi-email"
+            dense
+            placeholder="Introduce tu correo electrónico"
+            :filled="!emailIsTouched"
+            color="success"
+            @input="$v.email.$touch()"
+            @focus="emailIsTouched = true"
+            @blur="
+              $v.email.$touch();
+              emailIsTouched = false;
+            "
+          ></v-text-field>
+          <label>Contraseña</label>
+          <small
+            @click="recoverPasswordObject.open = true"
+            class="float-right label-remember-pass cpointer"
+            >¿Has olvidado tu contraseña?</small
+          >
+          <v-text-field
+            v-model="password"
+            class="pt-1"
+            :error-messages="passwordErrors"
+            placeholder="Introduce tu contraseña"
+            required
+            type="password"
+            single-line
+            outlined
+            dense
+            append-icon="mdi-lock"
+            :filled="!passIsTouched"
+            @input="$v.password.$touch()"
+            @focus="passIsTouched = true"
+            @blur="
+              $v.password.$touch();
+              passIsTouched = false;
+            "
+          ></v-text-field>
 
-        <v-btn
-          large
-          dense
-          block
-          class="mr-4 mt-3 mb-4 text-capitalize"
-          color="success"
-          @click="submit"
-        >
-          Iniciar sesión
-        </v-btn>
-        <div class="d-flex justify-center">
-          <small>O inicia sesión con</small>
-        </div>
+          <v-btn
+            large
+            dense
+            block
+            class="mr-4 mt-3 mb-4 text-capitalize"
+            color="success"
+            @click="submit"
+          >
+            Iniciar sesión
+          </v-btn>
+          <div class="d-flex justify-center">
+            <small>O inicia sesión con</small>
+          </div>
+        </form>
         <GoogleLogin
-          class="google-btn"
+          class="rss-btn"
           :params="params"
           :onSuccess="onSuccess"
           :onFailure="onFailure"
@@ -88,6 +90,10 @@
           <img src="./../../assets/img/btn-google-sign-in.svg" />
           <span>Google</span>
         </GoogleLogin>
+        <div class="rss-btn cpointer" @click="externalLogin('github')">
+          <img width="20" src="./../../assets/img/github.png" />
+          <span class="pl-2">Github</span>
+        </div>
         <div class="d-flex justify-center align-end wrapper-register-text">
           <small
             >¿Todavía no estás registrado?
@@ -96,7 +102,7 @@
             ></small
           >
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -193,6 +199,13 @@ export default {
         }
       });
     },
+    externalLogin(param) {
+      switch(param){
+        case 'github': 
+          window.location.href = "http://localhost:3000/auth/github";
+        break;
+      }
+    },
     saveLoginData(response) {
       // save user credentials on localStorage and vuex
       localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -202,10 +215,6 @@ export default {
       this.$router.push("/home");
     },
     onSuccess(googleUser) {
-      // console.log('success', googleUser);
-
-      // This only gets the user information: id, name, imageUrl and email
-      // console.log(googleUser.getBasicProfile().getEmail());
       let email = googleUser.getBasicProfile().getEmail();
       this.loginGoogle(email);
     },
@@ -242,7 +251,7 @@ export default {
 .wrapper-register-text > small > b:hover {
   text-decoration: underline;
 }
-.google-btn {
+.rss-btn {
   background-color: white;
   width: 100%;
   border: 0.5px solid #dedede;

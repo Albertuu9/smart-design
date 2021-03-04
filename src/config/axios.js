@@ -1,14 +1,16 @@
 import axios from 'axios'
 
 const HTTP = axios.create({
-  // prod: process.env.VUE_APP_PROD_URL,
-  // dev: process.env.VUE_APP_DEV_URL,
-  baseURL: process.env.VUE_APP_PROD_URL,
-  // baseURL: process.env.VUE_APP_DEV_URL,
+  //baseURL: process.env.VUE_APP_PROD_URL,
+  baseURL: process.env.VUE_APP_DEV_URL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': 'http://localhost:3000/',
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
   }
 })
+
 
 // Intercept all responses
 axios.interceptors.response.use(

@@ -17,7 +17,6 @@ Vue.use(VueToast, {
   queue: false
 });
 
-
 new Vue({
   router,
   store,

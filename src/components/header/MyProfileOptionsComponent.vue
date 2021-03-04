@@ -83,6 +83,9 @@ export default {
     closeSession(){
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      if(localStorage.getItem('googleLogin')) {
+        localStorage.removeItem('googleLogin');
+      }
       this.$router.push('/login');
     }
   }

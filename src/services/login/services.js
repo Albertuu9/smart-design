@@ -42,6 +42,14 @@ const ServicesLogin = {
         })
     },
 
+    checkUserById(payload) {
+        return HTTP.post('/checkUserById', payload).then((response) => {
+            return response
+        }).catch((error) => {
+            return error
+        })
+    },
+
 }
 
 export default ServicesLogin
