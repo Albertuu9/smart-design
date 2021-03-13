@@ -47,6 +47,24 @@ form > label{
     font-style: italic;
 }
 
+.placeholder_title {
+    color: #fefefe;
+    font-size: 22px;
+    font-weight: lighter;
+}
+
+.rss-btn {
+    background-color: white;
+    width: 100%;
+    border: 0.5px solid #dedede;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    padding: 6px;
+  }
+
 *{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     @media only screen and (max-width: 1020px) {

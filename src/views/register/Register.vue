@@ -413,12 +413,18 @@ export default {
     // services
     externalLogin(param) {
       switch (param) {
-        case "github":
-          window.location.href = "http://localhost:3000/auth/github";
-          break;
-        case "google":
-          window.location.href = "http://localhost:3000/auth/google";
-          break;
+        case 'github': 
+          // dev
+          // window.location.href = "http://localhost:3000/auth/github";
+          // prod
+          window.location.href = "https://api.app-smartdesign.com/auth/github";
+        break;
+        case 'google': 
+          // dev
+          // window.location.href = "http://localhost:3000/auth/google";
+          // prod
+          window.location.href = "https://api.app-smartdesign.com/auth/google";
+        break;
       }
     },
     getCountries() {
