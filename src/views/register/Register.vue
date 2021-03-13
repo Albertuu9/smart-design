@@ -26,14 +26,12 @@
       <div class="register-wrapper d-flex">
         <div class="form-wrapper">
           <form class="d-flex flex-column" @submit.prevent>
-            <div class="d-flex align-center">
+            <!-- <div class="d-flex align-center">
               <h2>
                 Regístrate
               </h2>
-            </div>
-            <div
-              class="mt-5 d-flex flex-row align-center justify-space-between"
-            >
+            </div> -->
+            <div class="d-flex flex-row align-center justify-space-between">
               <div class="d-flex flex-column mandatory-wrapper">
                 <label>Nombre*</label>
                 <v-text-field
@@ -234,15 +232,14 @@
               <small>O regístrate con</small>
             </div>
           </form>
-          <GoogleLogin
-            class="google-btn cpointer"
-            :params="params"
-            :onSuccess="onSuccess"
-            :onFailure="onFailure"
-          >
-            <img src="./../../assets/img/btn-google-sign-in.svg" />
-            <span>Google</span>
-          </GoogleLogin>
+          <div class="rss-btn cpointer" @click="externalLogin('google')">
+            <img width="25" src="./../../assets/img/google.png" />
+            <span class="pl-2">Google</span>
+          </div>
+          <div class="rss-btn cpointer" @click="externalLogin('github')">
+            <img width="20" src="./../../assets/img/github.png" />
+            <span class="pl-2">Github</span>
+          </div>
           <div class="d-flex footer-text align-center justify-center">
             <small
               >¿Ya tienes una cuenta?
@@ -270,6 +267,9 @@ import ModalComponent from "./../../components/shared/modal/ModalComponent";
 import GoogleLogin from "vue-google-login";
 // services
 import ServicesRegister from "./../../services/register/services";
+import ServicesShared from "./../../services/shared/services";
+import ServicesUtil from "./../../services/shared/services";
+
 export default {
   mixins: [validationMixin],
   components: {
@@ -411,8 +411,18 @@ export default {
       this.avatar = avatar;
     },
     // services
+    externalLogin(param) {
+      switch (param) {
+        case "github":
+          window.location.href = "http://localhost:3000/auth/github";
+          break;
+        case "google":
+          window.location.href = "http://localhost:3000/auth/google";
+          break;
+      }
+    },
     getCountries() {
-      ServicesRegister.getCountries()
+      ServicesUtil.getCountries()
         .then((response) => {
           this.countries = response.data;
         })
@@ -435,36 +445,6 @@ export default {
         email: this.email,
         password: this.password,
         avatar: this.avatar,
-      };
-      ServicesRegister.saveNewUser(payload).then((response) => {
-        if (response.data.code === 200) {
-          this.$toast.success("Usuario registrado correctamente");
-          this.saveLoginData(response);
-        } else {
-          this.$toast.error(
-            "Ha habido un error en el servidor, contacta con agf.smartdesign@gmail.com"
-          );
-        }
-      });
-    },
-    onSuccess(googleUser) {
-      // console.log('success', googleUser);
-
-      // This only gets the user information: id, name, imageUrl and email
-      // console.log(googleUser.getBasicProfile().getEmail());
-      let name = googleUser.getBasicProfile().getName();
-      let email = googleUser.getBasicProfile().getEmail();
-      this.saveGoogleUser(name, email);
-    },
-    onFailure(error) {
-      console.log("error", error);
-    },
-    saveGoogleUser(name, email) {
-      let payload = {
-        name: name,
-        country: this.country,
-        email: email,
-        method: "google",
       };
       ServicesRegister.saveNewUser(payload).then((response) => {
         if (response.data.code === 200) {

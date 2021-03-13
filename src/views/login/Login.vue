@@ -81,15 +81,10 @@
             <small>O inicia sesión con</small>
           </div>
         </form>
-        <GoogleLogin
-          class="rss-btn"
-          :params="params"
-          :onSuccess="onSuccess"
-          :onFailure="onFailure"
-        >
-          <img src="./../../assets/img/btn-google-sign-in.svg" />
-          <span>Google</span>
-        </GoogleLogin>
+        <div class="rss-btn cpointer" @click="externalLogin('google')">
+          <img width="25" src="./../../assets/img/google.png" />
+          <span class="pl-2">Google</span>
+        </div>
         <div class="rss-btn cpointer" @click="externalLogin('github')">
           <img width="20" src="./../../assets/img/github.png" />
           <span class="pl-2">Github</span>
@@ -184,25 +179,13 @@ export default {
         }
       });
     },
-    loginGoogle(email) {
-      let payload = {
-        email: email,
-      };
-      ServicesGoogle.loginGoogle(payload).then((response) => {
-        if (response.data.code === 200) {
-          localStorage.setItem("googleLogin", true);
-          this.saveLoginData(response);
-        } else {
-          this.$toast.error(
-            "UPS! parece que este email no existe o se ha producido un error, vuelve a intentarlo"
-          );
-        }
-      });
-    },
     externalLogin(param) {
       switch(param){
         case 'github': 
           window.location.href = "http://localhost:3000/auth/github";
+        break;
+        case 'google': 
+          window.location.href = "http://localhost:3000/auth/google";
         break;
       }
     },
@@ -213,14 +196,7 @@ export default {
       this.$store.commit("setUser", response.data.user);
       this.$store.commit("setToken", response.data.token);
       this.$router.push("/home");
-    },
-    onSuccess(googleUser) {
-      let email = googleUser.getBasicProfile().getEmail();
-      this.loginGoogle(email);
-    },
-    onFailure(error) {
-      console.log("error", error);
-    },
+    }
   },
 };
 </script>
@@ -251,15 +227,5 @@ export default {
 .wrapper-register-text > small > b:hover {
   text-decoration: underline;
 }
-.rss-btn {
-  background-color: white;
-  width: 100%;
-  border: 0.5px solid #dedede;
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  padding: 6px;
-}
+
 </style>
