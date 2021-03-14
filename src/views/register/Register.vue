@@ -236,10 +236,10 @@
             <img width="25" src="./../../assets/img/google.png" />
             <span class="pl-2">Google</span>
           </div>
-          <div class="rss-btn cpointer" @click="externalLogin('github')">
+          <!-- <div class="rss-btn cpointer" @click="externalLogin('github')">
             <img width="20" src="./../../assets/img/github.png" />
             <span class="pl-2">Github</span>
-          </div>
+          </div> -->
           <div class="d-flex footer-text align-center justify-center">
             <small
               >¿Ya tienes una cuenta?
