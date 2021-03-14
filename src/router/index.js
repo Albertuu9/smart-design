@@ -44,7 +44,7 @@ const routes = [
     name: 'SocialLogin',
     component: SocialLogin,
     meta: {
-      requiresAuth: true
+      requiresAuth: false
     }
   }
   // {
