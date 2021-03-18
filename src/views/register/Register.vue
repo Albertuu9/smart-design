@@ -415,15 +415,15 @@ export default {
       switch (param) {
         case 'github': 
           // dev
-          // window.location.href = "http://localhost:3000/auth/github";
+          window.location.href = "http://localhost:3000/auth/github";
           // prod
-          window.location.href = "https://api.app-smartdesign.com/auth/github";
+          // window.location.href = "https://api.app-smartdesign.com/auth/github";
         break;
         case 'google': 
           // dev
-          // window.location.href = "http://localhost:3000/auth/google";
+          window.location.href = "http://localhost:3000/auth/google";
           // prod
-          window.location.href = "https://api.app-smartdesign.com/auth/google";
+          // window.location.href = "https://api.app-smartdesign.com/auth/google";
         break;
       }
     },

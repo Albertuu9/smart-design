@@ -1,93 +1,53 @@
 <template>
   <div class="pa-2 avatar-selection-wrapper">
-    <div class="d-flex justify-center">
-      <v-btn-toggle
-        v-model="selectedAvatarsCategory"
-        @change="showAvatarsWrapper()"
-        rounded
-      >
-        <v-btn small class="text-capitalize">
-          <v-icon small class="pr-1">mdi-drama-masks</v-icon>
-          <span>Standard</span>
-        </v-btn>
-        <v-btn small class="text-capitalize">
-          <v-icon small :color="'#ffd700'" class="pr-1">mdi-crown</v-icon>
-          <span>Premium</span>
-        </v-btn>
-      </v-btn-toggle>
-    </div>
-    <div class="d-flex body-wrapper">
+    <div class="d-flex flex-wrap body-wrapper mb-5">
       <div class="d-flex flex-row flex-wrap row-avatar-wrapper">
-        <div
-          class="d-flex align-center avatar-wrapper justify-center mb-5"
-          v-for="(avatar, index) in avatarsLoaded"
-          :key="index"
-        >
-          <div>
-            <img
-              :id="avatar._id"
-              @click="selectAvatar(avatar)"
-              :class="
-                avatar.type === 'standard'
-                  ? 'avatar-image'
-                  : avatar.block
-                  ? 'premium-block-image'
-                  : 'premium-image'
-              "
-              :src="avatar.path"
-            />
-            <img
-              class="avatar-block"
-              v-if="avatar.block"
-              src="./../../../assets/icons/lock.svg"
-            />
+          <div
+            class="d-flex align-center avatar-wrapper justify-center"
+            v-for="(avatar, index) in avatars"
+            :key="index"
+          >
+            <div>
+              <img
+                class="avatar-image"
+                :id="avatar._id"
+                :src="avatar.path"
+                @click="selectAvatar(avatar)"
+              />
+            </div>
           </div>
-        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import AvatarsServices from "./../../../services/avatars/services"
+import AvatarsServices from "./../../../services/avatars/services";
 export default {
   name: "AvatarSelectionComponent",
   data() {
     return {
       selectedAvatarsCategory: 0,
-      avatarsLoaded: [],
-      premiums: [],
       avatars: [],
-      currentPath: ''
+      currentPath: "",
     };
   },
-  mounted(){
+  mounted() {
     this.currentPath = this.$router.currentRoute.path;
   },
   created() {
     this.loadData();
   },
   methods: {
-    loadData(){
+    loadData() {
       this.loadAvatars().then((response) => {
-        this.premiums = response.data.filter(avatar => avatar.type === 'premium');
-        this.avatars = response.data.filter(avatar => avatar.type === 'standard');
-        if(this.currentPath === '/register') {
-          this.premiums.forEach((premium) => {
-            premium.block = true;
-          })
-        } // else if(this.currentPath !== '/register' && ) {
-          // falta comprobar si el usuario es premium o no, si no es premium bloquear los avatares de "pago"
-        // }
-        this.showAvatarsWrapper();
-      })
+        this.avatars = response.data.standardAvatars;
+      });
     },
     selectAvatar(avatar) {
       if (!avatar.block) {
         let selectedClass = "";
         if (avatar.type === "standard") {
           selectedClass = "selected";
-        } else if (avatar.type === "premium") {
-          selectedClass = "premium-selected";
         }
         this.resetAvatarSelected(avatar);
         let listAvatars = [];
@@ -109,9 +69,6 @@ export default {
       if (avatar.type === "standard") {
         iconClass = "avatar-image";
         selectedClass = "selected";
-      } else if (avatar.type === "premium") {
-        iconClass = "premium-image";
-        selectedClass = "premium-selected";
       }
       listAvatars = this.checkAvatars(avatar);
       listAvatars.forEach((avatar) => {
@@ -121,27 +78,17 @@ export default {
         }
       });
     },
-    showAvatarsWrapper() {
-      this.avatarsLoaded = [];
-      if (this.selectedAvatarsCategory === 0) {
-        this.avatarsLoaded = this.avatars;
-      } else {
-        this.avatarsLoaded = this.premiums;
-      }
-    },
     checkAvatars(avatar) {
       let listAvatars = [];
       if (avatar.type === "standard") {
         listAvatars = this.avatars;
-      } else if (avatar.type === "premium") {
-        listAvatars = this.premiums;
       }
       return listAvatars;
     },
     // services
-    loadAvatars(){
+    loadAvatars() {
       return AvatarsServices.loadAvatars();
-    }
+    },
   },
 };
 </script>
@@ -159,7 +106,7 @@ export default {
 }
 .row-avatar-wrapper {
   width: 100%;
-  height: 100px;
+  height: 150px;
   margin: 0px 80px 0px 80px;
 }
 .avatar-image {
@@ -169,7 +116,7 @@ export default {
 .avatar-selection-wrapper {
   max-height: 500px;
   height: 100%;
-  background-color: #f4f4f4;
+  background-color: #f7f7f7;
 }
 .premium-image {
   width: 80px;

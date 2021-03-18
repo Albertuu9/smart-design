@@ -5,7 +5,7 @@
         <v-icon color="success" class="pr-2" v-if="icon">{{ icon }}</v-icon>
         <span class="title">{{ title }}</span>
         <v-spacer></v-spacer>
-        <v-btn :color="'#777777'" @click="closeModal" dark icon>
+        <v-btn :color="'#aaaaaa'" @click="closeModal" dark icon>
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-title>
@@ -15,10 +15,13 @@
         v-bind:is="currentComponent"
       ></component>
 
-      <v-card-actions v-if="type !== 'password'">
+      <v-card-actions class="py-4" v-if="type !== 'password'">
         <v-spacer></v-spacer>
-        <v-btn icon color="success" text @click="saveData">
-          <v-icon>mdi-check-bold</v-icon>
+        <v-btn :color="'#aaaaaa'" class="white--text" small @click="closeModal">
+          Cancelar
+        </v-btn>
+        <v-btn color="success" small @click="saveData">
+          Aceptar
         </v-btn>
       </v-card-actions>
     </v-card>

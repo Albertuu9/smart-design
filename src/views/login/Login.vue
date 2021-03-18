@@ -110,7 +110,6 @@ import ModalComponent from "./../../components/shared/modal/ModalComponent";
 import GoogleLogin from "vue-google-login";
 // services
 import ServicesLogin from "./../../services/login/services";
-import ServicesGoogle from "./../../services/google/services";
 export default {
   mixins: [validationMixin],
   components: {
@@ -183,15 +182,15 @@ export default {
       switch(param){
         case 'github': 
           // dev
-          // window.location.href = "http://localhost:3000/auth/github";
+          window.location.href = "http://localhost:3000/auth/github";
           // prod
-          document.location.href = "https://api.app-smartdesign.com/auth/github";
+          // document.location.href = "https://api.app-smartdesign.com/auth/github";
         break;
         case 'google': 
           // dev
-          // window.location.href = "http://localhost:3000/auth/google";
+          window.location.href = "http://localhost:3000/auth/google";
           // prod
-          window.location.href = "https://api.app-smartdesign.com/auth/google";
+          // window.location.href = "https://api.app-smartdesign.com/auth/google";
         break;
       }
     },

@@ -40,11 +40,13 @@ export default {
       };
       ServicesLogin.checkUserById(payload).then((response) => {
         if (response.data.code === 200 && response.data.user) {
-          localStorage.setItem("user", JSON.stringify(user));
-          localStorage.setItem("token", JSON.stringify(token));
-          this.$store.commit("setUser", user);
-          this.$store.commit("setToken", token);
-          this.$router.push("/home");
+          setTimeout(() => {
+            localStorage.setItem("user", JSON.stringify(user));
+            localStorage.setItem("token", JSON.stringify(token));
+            this.$store.commit("setUser", user);
+            this.$store.commit("setToken", token);
+            this.$router.push("/home");
+          }, 3000);
         } else {
           this.$router.push("/");
         }
