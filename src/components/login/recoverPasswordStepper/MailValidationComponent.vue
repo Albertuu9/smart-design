@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="d-flex flex-column">
-      <span>Vamos a enviar un código al siguiente correo electrónico:</span>
+      <span>{{ $t('email_validation.email_text') }}</span>
       <form class="form-wrapper mt-4 mb-4" @submit.prevent>
-        <label>Correo electrónico</label>
+        <label>{{ $t('email_validation.email_label') }}</label>
         <div class="d-flex align-center ">
           <v-text-field
             v-model="email"
@@ -13,7 +13,7 @@
             single-line
             outlined
             dense
-            placeholder="Introduce tu correo electrónico"
+            :placeholder="$t('email_validation.email_placeholder')"
             :append-icon="
               isMailExists !== null
                 ? isMailExists
@@ -51,7 +51,7 @@
             <v-icon large>mdi-arrow-right-circle</v-icon>
           </v-btn>
         </template>
-        <span>Siguiente</span>
+        <span>{{ $t('generic.next') }}</span>
       </v-tooltip>
     </div>
   </div>
@@ -79,9 +79,9 @@ export default {
     emailErrors() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push("Debe ser un correo válido");
+      !this.$v.email.email && errors.push(this.$t('email_validation.email_invalid'));
       !this.$v.email.required &&
-        errors.push("El correo electrónico es requerido");
+        errors.push(this.$t('email_validation.email_required'));
       return errors;
     },
   },

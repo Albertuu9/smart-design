@@ -22,7 +22,7 @@
           passwordValidation.icon
         }}</v-icon>
         <small :class="passwordValidation.class" class="ml-1 pt-1"
-          >Seguridad de la contraseña: {{ passwordValidation.security }}</small
+          >{{ $t('shared.password_security') }} {{ passwordValidation.security }}</small
         >
       </div>
     </transition>
@@ -57,17 +57,17 @@ export default {
     password: {
       handler(value) {
         if (this.lightValidation(value)) {
-          this.passwordValidation.security = "baja";
+          this.passwordValidation.security = this.$t('shared.low');
           this.passwordValidation.icon = "mdi-lock-remove";
           this.passwordValidation.class = "low-security";
         }
         if (this.mediumValidation(value)) {
-          this.passwordValidation.security = "media";
+          this.passwordValidation.security = this.$t('shared.medium');
           this.passwordValidation.icon = "mdi-lock-minus";
           this.passwordValidation.class = "medium-security";
         }
         if (this.strengthValidation(value)) {
-          this.passwordValidation.security = "alta";
+          this.passwordValidation.security = this.$t('shared.high');
           this.passwordValidation.icon = "mdi-lock-check";
           this.passwordValidation.class = "high-security";
         }

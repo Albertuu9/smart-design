@@ -1,5 +1,100 @@
 {
-    "register-page": {
-        "title": "Regístrate para disfrutar de todas las ventajas de la plataforma."
+    "generic": {
+        "next": "Siguiente",
+        "save&exit": "Guardar y salir",
+        "back": "Atrás"
+    },
+    "register_page": {
+        "required_name": "Nombre*",
+        "name_placeholder": "Introduce tu nombre",
+        "surname": "Apellidos",
+        "surname_placeholder": "Introduce tus apellidos",
+        "required_country": "País*",
+        "country_placeholder": "Selecciona tu país",
+        "required_user_type": "Tipo de usuario*",
+        "user_type_placeholder": "Selecciona tipo de usuario",
+        "required_email": "Correo electrónico*",
+        "email_placeholder": "Introduce tu correo electrónico",
+        "required_password": "Contraseña*",
+        "password_placeholder": "Introduce tu contraseña",
+        "avatar": "Avatar",
+        "with_avatar": "Con avatar",
+        "without_avatar": "Sin avatar",
+        "select_avatar": "Seleccionar avatar",
+        "change_avatar": "Cambiar avatar",
+        "sign_up_btn": "Regístrate",
+        "sign_up_btn_blocked": "Creando usuario...",
+        "guest_btn": "Acceder como invitado",
+        "separator_register_text": "O regístrate con",
+        "already_account": "¿Ya tienes una cuenta?",
+        "access": "Acceder",
+        "error_name": "El nombre es requerido.",
+        "error_country": "El país es requerido.",
+        "error_user_type": "Selecciona un tipo de usuario.",
+        "error_email": "El correo electrónico es requerido",
+        "error_email_invalid": "Debe ser un correo válido",
+        "error_password": "La contraseña es requerida.",
+        "error_password_length": "La longitud mínima es de 8 caracteres",
+        "error_email_exists": "Este correo ya existe en la plataforma, por favor introduce otro",
+        "success_sign_up": "Usuario registrado correctamente",
+        "error_sign_up": "Ha habido un error en el servidor, contacta con agf.smartdesign@gmail.com"
+    },
+    "login_page": {
+        "email": "Correo electrónico",
+        "email_placeholder": "Introduce tu correo electrónico",
+        "password": "Contraseña",
+        "password_placeholder":"Introduce tu contraseña",
+        "forget_password": "¿Has olvidado tu contraseña?",
+        "login": "Iniciar Sesión",
+        "login_loader": "Iniciando sesión...",
+        "login_separator_text": "O inicia sesión con",
+        "not_already_login": "¿Todavía no estás registrado?",
+        "register_here": "¡hazlo aquí!",
+        "password_required": "La contraseña es requerida.",
+        "email_required": "El correo electrónico es requerido.",
+        "email_valid": "Debe ser un correo válido",
+        "user_failed": "El usuario o la contraseña no son correctos"
+    },
+    "generic_modal": {
+        "accept": "Aceptar",
+        "cancel": "Cancelar",
+        "success_data": "datos guardados correctamente"
+    },
+    "code_validation": {
+        "email_message": "Introduce el código de verificación que has recibido en tu correo electrónico:",
+        "email_not_received": "¿No has recibido ningún correo? Infórmanos del error al siguiente correo:"
+    },
+    "email_validation": {
+        "email_text": "Vamos a enviar un código al siguiente correo electrónico:",
+        "email_label": "Correo electrónico",
+        "email_placeholder": "Introduce tu correo electrónico",
+        "email_required": "El correo electrónico es requerido",
+        "email_invalid": "Debe ser un correo válido"
+    },
+    "new_password": {
+        "create_password": "Crea tu nueva contraseña y accede a tu cuenta:",
+        "title_password": "Contraseña",
+        "repeat_password": "Repite contraseña",
+        "type_password_placeholder": "Escribe aquí tu contraseña",
+        "repeat_password_placeholder": "Repite aquí tu contraseña",
+        "password_save_success": "La contraseña se ha cambiado correctamente",
+        "password_not_match": "Las contraseñas no coinciden",
+        "password_error_length": "Las contraseñas deben tener 8 carácteres o más"
+    },
+    "recover_password": {
+        "validate_email": "Validar correo",
+        "validate_codigo": "Validar código",
+        "new_password": "Crear nueva contraseña"
+    },
+    "inData": {
+        "recover_password": "Recuperar contraseña",
+        "select_avatar": "Seleccionar avatar"
+    },
+    "shared": {
+        "password_security": "Seguridad de la contraseña:",
+        "low": "baja",
+        "medium": "media",
+        "high": "alta",
+        "send_another_code": "Envíame otro código de verificación"
     }
 }

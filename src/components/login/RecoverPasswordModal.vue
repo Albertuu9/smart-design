@@ -2,19 +2,19 @@
   <v-stepper v-model="currentStep">
     <v-stepper-header>
       <v-stepper-step color="success" :complete="currentStep > 1" step="1">
-        Validar correo
+        {{ $t('recover_password.validate_email') }}
       </v-stepper-step>
 
       <v-divider></v-divider>
 
       <v-stepper-step color="success" :complete="currentStep > 2" step="2">
-        Validar código
+        {{ $t('recover_password.validate_codigo') }}
       </v-stepper-step>
 
       <v-divider></v-divider>
 
       <v-stepper-step color="success" step="3">
-        Crear nueva contraseña
+        {{ $t('recover_password.new_password') }}
       </v-stepper-step>
     </v-stepper-header>
 

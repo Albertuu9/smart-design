@@ -1,16 +1,16 @@
 <template>
   <div>
-    <span>Crea tu nueva contraseña y accede a tu cuenta:</span>
+    <span>{{ $t('new_password.create_password') }}</span>
     <form class="form-wrapper mt-4 mb-4">
       <PasswordComponent
         class="mb-3"
-        :title="'Contraseña'"
-        :placeholder="'Escribe aquí tu contraseña'"
+        :title="$t('new_password.title_password')"
+        :placeholder="$t('new_password.type_password_placeholder')"
         @sendPassword="getPassword($event)"
       />
       <PasswordComponent
-        :title="'Repite contraseña'"
-        :placeholder="'Repite aquí tu contraseña'"
+        :title="$t('new_password.repeat_password')"
+        :placeholder="$t('new_password.repeat_password_placeholder')"
         @sendPassword="getPassword($event)"
       />
     </form>
@@ -28,7 +28,7 @@
             <v-icon>mdi-check-bold</v-icon>
           </v-btn>
         </template>
-        <span>Guardar y salir</span>
+        <span>{{ $t('generic.save&exit') }}</span>
       </v-tooltip>
     </div>
   </div>
@@ -54,9 +54,6 @@ export default {
     repeatPassword: null,
     blockButton: true,
   }),
-  created(){
-    console.log('hheheheehuser', this.user);
-  },
   methods: {
     // emit events
     goNextStep() {
@@ -69,15 +66,15 @@ export default {
           LoginService.updatePassword(payload).then((response) => {
             if(response.data.code === 200) {
               this.$emit("close", true);
-              this.$toast.success("La contraseña se ha cambiado correctamente");
+              this.$toast.success(this.$t('new_password.password_save_success'));
             }
           })
           // 
         } else {
-          this.$toast.error("Las contraseñas no coinciden");
+          this.$toast.error(this.$t('new_password.password_not_match'));
         }
       } else {
-        this.$toast.error("Las contraseñas deben tener 8 carácteres o más");
+        this.$toast.error(this.$t('new_password.password_error_length'));
       }
     },
     getPassword(data) {

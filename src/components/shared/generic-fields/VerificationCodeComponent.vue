@@ -23,7 +23,7 @@
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
       </template>
-      <span>Envíame otro código de verificación</span>
+      <span>{{ $t('shared.send_another_code') }}</span>
     </v-tooltip>
   </div>
 </template>

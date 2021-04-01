@@ -2,8 +2,7 @@
   <div>
     <div class="d-flex flex-column">
       <span
-        >Introduce el código de verificación que has recibido en tu correo
-        electrónico:</span
+        >{{ $t('code_validation.email_message') }}</span
       >
       <form class="form-wrapper mt-4 mb-4" @submit.prevent>
         <div class="d-flex align-center justify-center">
@@ -17,7 +16,7 @@
           <v-icon color="primary" small v-bind="attrs" v-on="on">mdi-help-circle</v-icon>
         </template>
         <span
-          >¿No has recibido ningún correo? Infórmanos del error al siguiente correo:
+          >{{ $t('code_validation.email_not_received') }}
           <b>agf.smartdesign@gmail.com</b></span
         >
       </v-tooltip>
@@ -35,7 +34,7 @@
             <v-icon large>mdi-arrow-left-circle</v-icon>
           </v-btn>
         </template>
-        <span>Atrás</span>
+        <span>{{ $t('generic.back') }}</span>
       </v-tooltip>
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
@@ -51,7 +50,7 @@
             <v-icon large>mdi-arrow-right-circle</v-icon>
           </v-btn>
         </template>
-        <span>Siguiente</span>
+        <span>{{ $t('generic.next') }}</span>
       </v-tooltip>
     </div>
   </div>

@@ -48,7 +48,7 @@ export default {
             this.$router.push("/home");
           }, 3000);
         } else {
-          this.$router.push("/");
+          // this.$router.push("/");
         }
       });
     },

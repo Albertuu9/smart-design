@@ -1,21 +1,27 @@
 <template>
   <div class="pa-2 avatar-selection-wrapper">
     <div class="d-flex flex-wrap body-wrapper mb-5">
+      <div
+        class="d-flex flex-column flex-wrap align-center justify-center spinner-wrapper"
+        v-if="spinner"
+      >
+        <v-icon x-large color="green">mdi mdi-loading mdi-spin</v-icon>
+      </div>
       <div class="d-flex flex-row flex-wrap row-avatar-wrapper">
-          <div
-            class="d-flex align-center avatar-wrapper justify-center"
-            v-for="(avatar, index) in avatars"
-            :key="index"
-          >
-            <div>
-              <img
-                class="avatar-image"
-                :id="avatar._id"
-                :src="avatar.path"
-                @click="selectAvatar(avatar)"
-              />
-            </div>
+        <div
+          class="d-flex align-center avatar-wrapper justify-center"
+          v-for="(avatar, index) in avatars"
+          :key="index"
+        >
+          <div>
+            <img
+              class="avatar-image"
+              :id="avatar._id"
+              :src="avatar.path"
+              @click="selectAvatar(avatar)"
+            />
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -29,6 +35,7 @@ export default {
       selectedAvatarsCategory: 0,
       avatars: [],
       currentPath: "",
+      spinner: false,
     };
   },
   mounted() {
@@ -39,8 +46,13 @@ export default {
   },
   methods: {
     loadData() {
+      this.spinner = true;
       this.loadAvatars().then((response) => {
-        this.avatars = response.data.standardAvatars;
+        if(response && response.code === 200) {
+          this.spinner = false;
+          this.avatars = response.data.standardAvatars;
+        }
+        
       });
     },
     selectAvatar(avatar) {
@@ -98,6 +110,10 @@ export default {
   margin-top: 10px;
   height: 320px;
   overflow: auto;
+}
+.spinner-wrapper {
+  width: 100%;
+  height: 100%;
 }
 .avatar-wrapper {
   width: 20%;

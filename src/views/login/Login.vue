@@ -21,7 +21,7 @@
             <span class="main-logo pr-3">SD</span>
             <span class="main-title">SMARTDESIGN</span>
           </div>
-          <label>Correo electrónico</label>
+          <label>{{ $t('login_page.email') }}</label>
           <v-text-field
             v-model="email"
             class="pt-1"
@@ -31,9 +31,9 @@
             outlined
             append-icon="mdi-email"
             dense
-            placeholder="Introduce tu correo electrónico"
-            :filled="!emailIsTouched"
             color="success"
+            :filled="!emailIsTouched"
+            :placeholder="$t('login_page.email_placeholder')"
             @input="$v.email.$touch()"
             @focus="emailIsTouched = true"
             @blur="
@@ -41,23 +41,23 @@
               emailIsTouched = false;
             "
           ></v-text-field>
-          <label>Contraseña</label>
+          <label>{{ $t('login_page.password') }}</label>
           <small
             @click="recoverPasswordObject.open = true"
             class="float-right label-remember-pass cpointer"
-            >¿Has olvidado tu contraseña?</small
+            >{{ $t('login_page.forget_password') }}</small
           >
           <v-text-field
             v-model="password"
             class="pt-1"
-            :error-messages="passwordErrors"
-            placeholder="Introduce tu contraseña"
             required
             type="password"
             single-line
             outlined
             dense
             append-icon="mdi-lock"
+            :error-messages="passwordErrors"
+            :placeholder="$t('login_page.password_placeholder')"
             :filled="!passIsTouched"
             @input="$v.password.$touch()"
             @focus="passIsTouched = true"
@@ -73,12 +73,17 @@
             block
             class="mr-4 mt-3 mb-4 text-capitalize"
             color="success"
+            :disabled="spinner"
             @click="submit"
           >
-            Iniciar sesión
+            <span v-if="!spinner">{{ $t('login_page.login') }}</span>
+            <span v-else class="d-flex align-center">
+              <v-icon small class="pr-2">mdi mdi-loading mdi-spin</v-icon>
+              {{ $t('login_page.login_loader') }}
+            </span>
           </v-btn>
           <div class="d-flex justify-center">
-            <small>O inicia sesión con</small>
+            <small>{{ $t('login_page.login_separator_text') }}</small>
           </div>
         </form>
         <div class="rss-btn cpointer" @click="externalLogin('google')">
@@ -91,9 +96,9 @@
         </div> -->
         <div class="d-flex justify-center align-end wrapper-register-text">
           <small
-            >¿Todavía no estás registrado?
+            >{{ $t('login_page.not_already_login') }}
             <b class="cpointer text" @click="$router.push('/register')"
-              >¡hazlo aquí!</b
+              >{{ $t('login_page.register_here') }}</b
             ></small
           >
         </div>
@@ -125,11 +130,12 @@ export default {
   data: () => ({
     email: "",
     password: "",
+    spinner: false,
     recoverPasswordObject: {
       open: false,
       width: 600,
       height: 900,
-      title: "Recuperar contraseña",
+      title: "",
       icon: "mdi-lock-question",
       type: "password",
     },
@@ -140,19 +146,23 @@ export default {
     passIsTouched: null,
   }),
 
+  created(){
+    this.recoverPasswordObject.title = this.$t('inData.recover_password');
+  },
+
   computed: {
     passwordErrors() {
       const errors = [];
       if (!this.$v.password.$dirty) return errors;
-      !this.$v.password.required && errors.push("La contraseña es requerida.");
+      !this.$v.password.required && errors.push(this.$t('login_page.password_required'));
       return errors;
     },
     emailErrors() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push("Debe ser un correo válido");
+      !this.$v.email.email && errors.push(this.$t('login_page.email_valid'));
       !this.$v.email.required &&
-        errors.push("El correo electrónico es requerido");
+        errors.push(this.$t('login_page.email_required'));
       return errors;
     },
   },
@@ -161,6 +171,7 @@ export default {
     submit() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
+        this.spinner = true;
         this.login();
       }
     },
@@ -172,26 +183,28 @@ export default {
       };
       ServicesLogin.login(payload).then((response) => {
         if (response.data.code === 200) {
+          this.spinner = false;
           this.saveLoginData(response);
         } else {
-          this.$toast.error("El usuario o la contraseña son incorrectos");
+          this.spinner = false;
+          this.$toast.error(this.$t('login_page.user_failed'));
         }
       });
     },
     externalLogin(param) {
-      switch(param){
-        case 'github': 
+      switch (param) {
+        case "github":
           // dev
           window.location.href = "http://localhost:3000/auth/github";
           // prod
           // document.location.href = "https://api.app-smartdesign.com/auth/github";
-        break;
-        case 'google': 
+          break;
+        case "google":
           // dev
           window.location.href = "http://localhost:3000/auth/google";
           // prod
           // window.location.href = "https://api.app-smartdesign.com/auth/google";
-        break;
+          break;
       }
     },
     saveLoginData(response) {
@@ -201,7 +214,7 @@ export default {
       this.$store.commit("setUser", response.data.user);
       this.$store.commit("setToken", response.data.token);
       this.$router.push("/home");
-    }
+    },
   },
 };
 </script>
@@ -232,5 +245,4 @@ export default {
 .wrapper-register-text > small > b:hover {
   text-decoration: underline;
 }
-
 </style>

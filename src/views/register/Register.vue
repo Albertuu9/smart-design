@@ -26,14 +26,9 @@
       <div class="register-wrapper d-flex">
         <div class="form-wrapper">
           <form class="d-flex flex-column" @submit.prevent>
-            <!-- <div class="d-flex align-center">
-              <h2>
-                Regístrate
-              </h2>
-            </div> -->
             <div class="d-flex flex-row align-center justify-space-between">
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>Nombre*</label>
+                <label>{{ $t('register_page.required_name') }}</label>
                 <v-text-field
                   v-model="name"
                   class="pt-1 pr-2"
@@ -42,8 +37,8 @@
                   single-line
                   outlined
                   dense
-                  placeholder="Introduce tu nombre"
                   color="success"
+                  :placeholder="$t('register_page.name_placeholder')"
                   :filled="!nameIsTouched"
                   @input="$v.name.$touch()"
                   @focus="nameIsTouched = true"
@@ -54,11 +49,11 @@
                 ></v-text-field>
               </div>
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>Apellidos</label>
+                <label>{{ $t('register_page.surname') }}</label>
                 <v-text-field
                   class="pt-1"
                   v-model="surname"
-                  placeholder="Introduce tus apellidos"
+                  :placeholder="$t('register_page.surname_placeholder')"
                   single-line
                   outlined
                   dense
@@ -70,7 +65,7 @@
             </div>
             <div class="d-flex flex-row align-center justify-space-between">
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>País*</label>
+                <label>{{ $t('register_page.required_country') }}</label>
                 <v-autocomplete
                   class="pt-1 pr-2"
                   return-object
@@ -78,10 +73,10 @@
                   dense
                   outlined
                   clearable
-                  placeholder="Selecciona tu país"
                   item-text="name"
                   item-value="alpha2Code"
                   v-model="country"
+                  :placeholder="$t('register_page.country_placeholder')"
                   :error-messages="countryErrors"
                   :items="countries"
                   :filled="!countryIsTouched"
@@ -100,7 +95,7 @@
                 </v-autocomplete>
               </div>
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>Tipo de usuario*</label>
+                <label>{{ $t('register_page.required_user_type') }}</label>
                 <v-select
                   class="pt-1"
                   return-object
@@ -108,9 +103,9 @@
                   dense
                   outlined
                   clearable
-                  placeholder="Selecciona tipo de usuario"
                   item-text="text"
                   v-model="user"
+                  :placeholder="$t('register_page.user_type_placeholder')"
                   :error-messages="userTypeErrors"
                   :items="userTypes"
                   :filled="!userTypeIsTouched"
@@ -126,7 +121,7 @@
             </div>
             <div class="d-flex flex-row align-center justify-space-between">
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>Correo electrónico*</label>
+                <label>{{ $t('register_page.required_email') }}</label>
                 <v-text-field
                   v-model="email"
                   class="pt-1 pr-2"
@@ -135,7 +130,7 @@
                   single-line
                   outlined
                   dense
-                  placeholder="Introduce tu correo electrónico"
+                  :placeholder="$t('register_page.email_placeholder')"
                   :filled="!emailIsTouched"
                   color="success"
                   @input="$v.email.$touch()"
@@ -147,16 +142,16 @@
                 ></v-text-field>
               </div>
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>Contraseña*</label>
+                <label>{{ $t('register_page.required_password') }}</label>
                 <v-text-field
                   class="pt-1"
                   v-model="password"
                   :error-messages="passwordErrors"
-                  placeholder="Introduce tu contraseña"
                   required
                   single-line
                   outlined
                   dense
+                  :placeholder="$t('register_page.password_placeholder')"
                   :type="showPassword ? 'text' : 'password'"
                   :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                   :filled="!passIsTouched"
@@ -172,7 +167,7 @@
             </div>
             <div class="d-flex flex-row align-center justify-space-between">
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>Avatar</label>
+                <label>{{ $t('register_page.avatar') }}</label>
                 <div class="d-flex align-center justify-space-between">
                   <v-radio-group
                     v-model="haveAvatar"
@@ -182,12 +177,12 @@
                   >
                     <v-radio
                       color="success"
-                      label="Sin avatar"
+                      :label="$t('register_page.with_avatar')"
                       :value="1"
                     ></v-radio>
                     <v-radio
                       color="success"
-                      label="Con avatar"
+                      :label="$t('register_page.without_avatar')"
                       :value="2"
                     ></v-radio>
                   </v-radio-group>
@@ -199,9 +194,9 @@
                   >
                     <v-icon small class="pr-2">mdi-drama-masks</v-icon>
                     <span v-if="!avatar" class="text-capitalize"
-                      >Seleccionar avatar</span
+                      >{{ $t('register_page.select_avatar') }}</span
                     >
-                    <span v-else class="text-capitalize">Cambiar avatar</span>
+                    <span v-else class="text-capitalize">{{ $t('register_page.change_avatar') }}</span>
                   </v-btn>
                 </div>
               </div>
@@ -213,9 +208,14 @@
               block
               class="mr-4 mt-3 mb-4 text-capitalize register-btn"
               color="success"
+              :disabled="spinner"
               @click="saveUser()"
             >
-              Regístrate
+              <span v-if="!spinner">{{ $t('register_page.sign_up_btn') }}</span>
+              <span v-else class="d-flex align-center">
+                <v-icon small class="pr-2">mdi mdi-loading mdi-spin</v-icon>
+                <span>{{ $t('register_page.sign_up_btn_blocked') }}</span>
+              </span>
             </v-btn>
             <v-btn
               large
@@ -223,13 +223,13 @@
               block
               dark
               class="mr-4 mt-3 mb-4 text-capitalize register-btn"
-              :color="'#cccccc'"
+              :color="'#aaaaaa'"
               @click="loginGuest()"
             >
-              Acceder como invitado
+              {{ $t('register_page.guest_btn') }}
             </v-btn>
             <div class="d-flex justify-center">
-              <small>O regístrate con</small>
+              <small>{{ $t('register_page.separator_register_text') }}</small>
             </div>
           </form>
           <div class="rss-btn cpointer" @click="externalLogin('google')">
@@ -240,11 +240,11 @@
             <img width="20" src="./../../assets/img/github.png" />
             <span class="pl-2">Github</span>
           </div> -->
-          <div class="d-flex footer-text align-center justify-center">
+          <div class="d-flex footer-text align-center justify-center wrapper-register-text">
             <small
-              >¿Ya tienes una cuenta?
+              >{{ $t('register_page.already_account') }}
               <b class="cpointer text" @click="$router.push('/login')"
-                >Acceder</b
+                >{{ $t('register_page.access') }}</b
               ></small
             >
           </div>
@@ -299,7 +299,7 @@ export default {
       open: false,
       width: 900,
       height: 900,
-      title: "Seleccionar avatar",
+      title: "",
       icon: "mdi-drama-masks",
       type: "avatar",
     },
@@ -324,57 +324,60 @@ export default {
     nameIsTouched: null,
     surnameIsTouched: null,
     showPassword: false,
+    spinner: false,
   }),
 
   computed: {
     nameErrors() {
       const errors = [];
       if (!this.$v.name.$dirty) return errors;
-      !this.$v.name.required && errors.push("El nombre es requerido.");
+      !this.$v.name.required && errors.push(this.$t('register_page.error_name'));
       return errors;
     },
     passwordErrors() {
       const errors = [];
       if (!this.$v.password.$dirty) return errors;
       !this.$v.password.minLength &&
-        errors.push("La longitud mínima es de 8 caracteres");
-      !this.$v.password.required && errors.push("La contraseña es requerida.");
+        errors.push(this.$t('register_page.error_password_length'));
+      !this.$v.password.required && errors.push(this.$t('register_page.error_password'));
       return errors;
     },
     countryErrors() {
       const errors = [];
       if (!this.$v.country.$dirty) return errors;
-      !this.$v.country.required && errors.push("El país es requerido.");
+      !this.$v.country.required && errors.push(this.$t('register_page.error_country'));
       return errors;
     },
     emailErrors() {
       const errors = [];
       let promises = [];
       if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push("Debe ser un correo válido");
+      !this.$v.email.email && errors.push(this.$t('register_page.error_email'));
       !this.$v.email.required &&
-        errors.push("El correo electrónico es requerido");
+        errors.push(this.$t('register_page.error_email_invalid'));
 
       return errors;
     },
     userTypeErrors() {
       const errors = [];
       if (!this.$v.user.$dirty) return errors;
-      !this.$v.user.required && errors.push("Selecciona un tipo de usuario.");
+      !this.$v.user.required && errors.push(this.$t('register_page.error_user_type'));
       return errors;
     },
   },
   created() {
     this.loadData();
+    this.avatarModalObject.title = this.$t('inData.select_avatar');
   },
   methods: {
     saveUser() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
+        this.spinner = true;
         this.checkMailExists(this.email).then((response) => {
           if (response.data.code === 200) {
             this.$toast.error(
-              "Este correo ya existe en la plataforma, por favor introduce otro"
+              this.$t('register_page.error_email_exists')
             );
           } else {
             this.saveNewUser();
@@ -413,18 +416,18 @@ export default {
     // services
     externalLogin(param) {
       switch (param) {
-        case 'github': 
+        case "github":
           // dev
           window.location.href = "http://localhost:3000/auth/github";
           // prod
           // window.location.href = "https://api.app-smartdesign.com/auth/github";
-        break;
-        case 'google': 
+          break;
+        case "google":
           // dev
           window.location.href = "http://localhost:3000/auth/google";
           // prod
           // window.location.href = "https://api.app-smartdesign.com/auth/google";
-        break;
+          break;
       }
     },
     getCountries() {
@@ -454,11 +457,13 @@ export default {
       };
       ServicesRegister.saveNewUser(payload).then((response) => {
         if (response.data.code === 200) {
-          this.$toast.success("Usuario registrado correctamente");
+          this.spinner = false;
+          this.$toast.success(this.$t('register_page.success_sign_up'));
           this.saveLoginData(response);
         } else {
+          this.spinner = false;
           this.$toast.error(
-            "Ha habido un error en el servidor, contacta con agf.smartdesign@gmail.com"
+            this.$t('register_page.error_sign_up')
           );
         }
       });
@@ -537,5 +542,8 @@ export default {
   justify-content: center;
   border-radius: 5px;
   padding: 6px;
+}
+.wrapper-register-text > small > b:hover {
+  text-decoration: underline;
 }
 </style>

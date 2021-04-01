@@ -18,10 +18,10 @@
       <v-card-actions class="py-4" v-if="type !== 'password'">
         <v-spacer></v-spacer>
         <v-btn :color="'#aaaaaa'" class="white--text" small @click="closeModal">
-          Cancelar
+          {{ $t('generic_modal.cancel') }}
         </v-btn>
         <v-btn color="success" small @click="saveData">
-          Aceptar
+          {{ $t('generic_modal.accept') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -84,7 +84,7 @@ export default {
     saveData() {
       if (this.returnData) {
         this.$emit("emitData", this.returnData);
-        this.$toast.success("datos guardados correctamente");
+        this.$toast.success(this.$t('generic_modal.success_data'));
       }
       this.closeModal();
     },
