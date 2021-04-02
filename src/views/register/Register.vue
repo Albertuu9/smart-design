@@ -307,16 +307,7 @@ export default {
       client_id: process.env.VUE_APP_CLIENT_ID,
     },
     haveAvatar: 1,
-    userTypes: [
-      {
-        id: 1,
-        text: "Particular",
-      },
-      {
-        id: 2,
-        text: "Empresa",
-      },
-    ],
+    userTypes: [],
     emailIsTouched: null,
     countryIsTouched: null,
     userTypeIsTouched: null,
@@ -388,6 +379,19 @@ export default {
     loadData() {
       this.getCountries();
       this.getUserIp();
+      this.loadUserTypes();
+    },
+    loadUserTypes(){
+      this.userTypes = [
+        {
+          id: 1,
+          text: this.$t('inData.particular')
+        },
+        {
+          id: 2,
+          text: this.$t('inData.business')
+        }
+      ]
     },
     getUserIp() {
       ServicesRegister.getClientIp().then((response) => {

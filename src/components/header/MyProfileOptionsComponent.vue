@@ -8,10 +8,10 @@
     offset-y
   >
     <template v-slot:activator="{ on }">
-      <v-avatar class="cpointer" color="white" size="36" v-on="on">
+      <v-avatar class="cpointer" color="white" size="40" v-on="on">
         <img
           class="profile-icon"
-          src="https://i.ibb.co/XxMyTMm/guest6.png"
+          :src="user.avatar"
         />
       </v-avatar>
     </template>
@@ -20,15 +20,15 @@
         <v-avatar class="cpointer" color="white" size="72">
         <img
           class="profile-icon"
-          src="https://i.ibb.co/XxMyTMm/guest6.png"
+          :src="user.avatar"
         />
       </v-avatar>
         <div class="d-flex flex-column pl-3">
-          <v-chip class="membership" small color="primary">
-            miembro standard
+          <v-chip v-if="!user.isPremium" class="membership" small color="primary">
+            standard
           </v-chip>
-          <h5 class="pt-2">Alberto González Ferrer</h5>
-          <small>alberto2daw@gmail.com</small>
+          <h5 class="pt-2">{{ user | completeName }}</h5>
+          <small>{{ user.email }}</small>
         </div>
       </div>
       <v-divider></v-divider>
@@ -53,6 +53,8 @@
   </v-menu>
 </template>
 <script>
+// utils
+import "./../../utils/filters/genericFilters";
 export default {
   name: "MyProfileOptions",
   data() {
@@ -66,7 +68,17 @@ export default {
       ],
     };
   },
+  computed: {
+    user() {
+      return this.$store.getters.getUser;
+    }
+  },
+  created(){
+    this.loadData();
+  },
   methods: {
+    loadData(){
+    },
     setOptions(id){
       switch(id) {
         case 1:
@@ -85,6 +97,8 @@ export default {
       localStorage.removeItem('user');
       if(localStorage.getItem('googleLogin')) {
         localStorage.removeItem('googleLogin');
+        let myWindow = window.open("https://mail.google.com/mail/u/0/?logout&hl=en");
+        setTimeout(()=>{myWindow.close()},1000);
       }
       this.$router.push('/login');
     }

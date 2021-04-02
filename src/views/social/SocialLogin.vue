@@ -43,12 +43,13 @@ export default {
           setTimeout(() => {
             localStorage.setItem("user", JSON.stringify(user));
             localStorage.setItem("token", JSON.stringify(token));
+            localStorage.setItem('googleLogin', true);
             this.$store.commit("setUser", user);
             this.$store.commit("setToken", token);
             this.$router.push("/home");
           }, 3000);
         } else {
-          // this.$router.push("/");
+          this.$router.push("/");
         }
       });
     },

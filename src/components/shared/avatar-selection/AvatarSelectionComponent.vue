@@ -71,7 +71,7 @@ export default {
               .setAttribute("class", selectedClass);
           }
         });
-        this.$emit("emitData", avatar._id);
+        this.$emit("emitData", avatar.path);
       }
     },
     resetAvatarSelected(avatar) {

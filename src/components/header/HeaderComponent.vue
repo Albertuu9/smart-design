@@ -47,23 +47,28 @@ export default {
     };
   },
   beforeCreate() {
-    if (localStorage.getItem("user")) {
-      this.$store.commit("setUser", JSON.parse(localStorage.getItem("user")));
-    }
     if (localStorage.getItem("token")) {
       this.$store.commit("setToken", JSON.parse(localStorage.getItem("token")));
     }
   },
-  computed: {
-    user() {
-      return this.$store.getters.getUser;
-    },
+  mounted(){
+    this.loadData();
   },
   methods: {
+    loadData(){
+      this.getUserData();
+    },
     openMenu() {
       this.openMenuData = !this.openMenuData;
       this.$emit("openMenu", !this.openMenuData);
     },
+    getUserData(){
+      // const auth = {
+      //     headers: {'access-token': localStorage.getItem('token')} 
+      // }
+      let userId = JSON.parse(localStorage.getItem('user'));
+      this.$store.dispatch('getUserData',{id: userId});
+    }
   },
 };
 </script>

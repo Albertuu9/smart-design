@@ -5,20 +5,35 @@ const HTTP = axios.create({
   baseURL: process.env.VUE_APP_DEV_URL
 })
 
+// Request interceptor for API calls
+HTTP.interceptors.request.use(
+  function(config) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['access-token'] = token;
+    }
+    return config;
+  },
+  function(error) {
+    // Do something with request error
+    this.$router.push("/");
+    return Promise.reject(error);
+  }
+);
 
 // Intercept all responses
-axios.interceptors.response.use(
+HTTP.interceptors.response.use(
   (response) => {
-    console.log('%c ' + response.status + ' - ' + getUrl(response.config) + ':', 'color: #008000; font-weight: bold', response);
+    // console.log('%c ' + response.status + ' - ' + getUrl(response.config) + ':', 'color: #008000; font-weight: bold', response);
     return response;
   },
 
   (error) => {
     if (error.response) {
 
-      console.log('%c ' + error.response.status + ' - ' + getUrl(error.response.config) + ':', 'color: #a71d5d; font-weight: bold', error.response);
+      // console.log('%c ' + error.response.status + ' - ' + getUrl(error.response.config) + ':', 'color: #a71d5d; font-weight: bold', error.response);
 
-      switch (error.response.status) {
+      switch (error.response.code) {
         case 400:
           Vue.$toast.error('Bad request.');
           break;
@@ -51,10 +66,5 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-let token = localStorage.getItem('token')
-if(token) {
-  axios.defaults.headers.common['access-token'] = token
-}
 
 export default HTTP

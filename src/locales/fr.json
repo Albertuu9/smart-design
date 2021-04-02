@@ -88,7 +88,9 @@
     },
     "inData": {
         "recover_password": "Recuperar contraseña",
-        "select_avatar": "Seleccionar avatar"
+        "select_avatar": "Seleccionar avatar",
+        "particular": "Particular",
+        "business": "Empresa"
     },
     "shared": {
         "password_security": "Seguridad de la contraseña:",
