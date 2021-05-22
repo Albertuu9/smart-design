@@ -15,7 +15,7 @@
       <LanguageSelectorComponent />
     </div>
     <div class="d-flex align-center mr-3">
-      <v-badge
+      <!-- <v-badge
         class="mr-4"
         :content="messages"
         :value="messages"
@@ -25,7 +25,7 @@
         <v-icon class="cpointer">
           mdi-bell
         </v-icon>
-      </v-badge>
+      </v-badge> -->
       <MyProfileOptionsComponent />
     </div>
   </v-app-bar>
@@ -43,7 +43,7 @@ export default {
     return {
       darkMode: false,
       messages: 1,
-      openMenuData: false,
+      openMenuData: false
     };
   },
   beforeCreate() {
@@ -51,24 +51,21 @@ export default {
       this.$store.commit("setToken", JSON.parse(localStorage.getItem("token")));
     }
   },
-  mounted(){
+  mounted() {
     this.loadData();
   },
   methods: {
-    loadData(){
+    loadData() {
       this.getUserData();
     },
     openMenu() {
       this.openMenuData = !this.openMenuData;
       this.$emit("openMenu", !this.openMenuData);
     },
-    getUserData(){
-      // const auth = {
-      //     headers: {'access-token': localStorage.getItem('token')} 
-      // }
-      let userId = JSON.parse(localStorage.getItem('user'));
-      this.$store.dispatch('getUserData',{id: userId});
-    }
+    getUserData() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      this.$store.dispatch("getUserData", { id: user });
+    },
   },
 };
 </script>

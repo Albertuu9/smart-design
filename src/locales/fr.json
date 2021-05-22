@@ -90,7 +90,11 @@
         "recover_password": "Recuperar contraseña",
         "select_avatar": "Seleccionar avatar",
         "particular": "Particular",
-        "business": "Empresa"
+        "business": "Empresa",
+        "my_profile": "Mi perfil",
+        "my_projects": "Mis proyectos",
+        "customization": "Personalización",
+        "logout": "Cerrar sesión"
     },
     "shared": {
         "password_security": "Seguridad de la contraseña:",

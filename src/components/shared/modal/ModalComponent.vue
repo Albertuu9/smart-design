@@ -1,8 +1,8 @@
 <template>
   <v-dialog persistent v-model="value" :width="width" :height="height">
     <v-card>
-      <v-card-title class="lighten-1 success--text d-flex align-center pa-4">
-        <v-icon color="success" class="pr-2" v-if="icon">{{ icon }}</v-icon>
+      <v-card-title class="lighten-1 title-modal d-flex align-center pa-4">
+        <v-icon :color="'#5cb85ccc'" class="pr-2" v-if="icon">{{ icon }}</v-icon>
         <span class="title">{{ title }}</span>
         <v-spacer></v-spacer>
         <v-btn :color="'#aaaaaa'" @click="closeModal" dark icon>
@@ -15,12 +15,12 @@
         v-bind:is="currentComponent"
       ></component>
 
-      <v-card-actions class="py-4" v-if="type !== 'password'">
+      <v-card-actions class="py-4" v-if="type !== 'password' && type !== 'profile'">
         <v-spacer></v-spacer>
-        <v-btn :color="'#aaaaaa'" class="white--text" small @click="closeModal">
+        <v-btn :color="'#aaaaaa'" class="white--text text-capitalize" small @click="closeModal">
           {{ $t('generic_modal.cancel') }}
         </v-btn>
-        <v-btn color="success" small @click="saveData">
+        <v-btn :color="'#5cb85ccc'" dark class="text-capitalize" small @click="saveData">
           {{ $t('generic_modal.accept') }}
         </v-btn>
       </v-card-actions>
@@ -102,5 +102,8 @@ export default {
 <style lang="scss">
 .v-card-actions {
   border: none;
+}
+.title-modal{
+  color: #5cb85ccc;
 }
 </style>

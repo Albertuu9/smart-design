@@ -19,7 +19,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
-            color="success"
+            :color="'#5cb85ccc'"
             v-bind="attrs"
             v-on="on"
             text

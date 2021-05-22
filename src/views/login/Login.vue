@@ -5,7 +5,7 @@
       v-model="recoverPasswordObject.open"
       :width="recoverPasswordObject.width"
       :height="recoverPasswordObject.height"
-      :title="recoverPasswordObject.title"
+      :title="$t('inData.recover_password')"
       :icon="recoverPasswordObject.icon"
       :type="recoverPasswordObject.type"
     />
@@ -31,7 +31,7 @@
             outlined
             append-icon="mdi-email"
             dense
-            color="success"
+            :color="'#5cb85ccc'"
             :filled="!emailIsTouched"
             :placeholder="$t('login_page.email_placeholder')"
             @input="$v.email.$touch()"
@@ -56,6 +56,7 @@
             outlined
             dense
             append-icon="mdi-lock"
+            :color="'#5cb85ccc'"
             :error-messages="passwordErrors"
             :placeholder="$t('login_page.password_placeholder')"
             :filled="!passIsTouched"
@@ -71,8 +72,9 @@
             large
             dense
             block
+            :dark="!spinner"
             class="mr-4 mt-3 mb-4 text-capitalize"
-            color="success"
+            :color="'#5cb85ccc'"
             :disabled="spinner"
             @click="submit"
           >
@@ -87,7 +89,7 @@
           </div>
         </form>
         <div class="rss-btn cpointer" @click="externalLogin('google')">
-          <img width="25" src="./../../assets/img/google.png" />
+          <img width="22" src="./../../assets/icons/google.svg" />
           <span class="pl-2">Google</span>
         </div>
         <!-- <div class="rss-btn cpointer" @click="externalLogin('github')">
@@ -135,7 +137,6 @@ export default {
       open: false,
       width: 600,
       height: 900,
-      title: "",
       icon: "mdi-lock-question",
       type: "password",
     },
@@ -145,10 +146,6 @@ export default {
     emailIsTouched: null,
     passIsTouched: null,
   }),
-
-  created(){
-    this.recoverPasswordObject.title = this.$t('inData.recover_password');
-  },
 
   computed: {
     passwordErrors() {

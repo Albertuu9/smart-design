@@ -1,11 +1,11 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex first-wrapper">
     <ModalComponent
       v-if="avatarModalObject.open"
       v-model="avatarModalObject.open"
       :width="avatarModalObject.width"
       :height="avatarModalObject.height"
-      :title="avatarModalObject.title"
+      :title="$t('inData.select_avatar')"
       :icon="avatarModalObject.icon"
       :type="avatarModalObject.type"
       @emitData="getAvatarSelected"
@@ -37,7 +37,7 @@
                   single-line
                   outlined
                   dense
-                  color="success"
+                  :color="'#5cb85ccc'"
                   :placeholder="$t('register_page.name_placeholder')"
                   :filled="!nameIsTouched"
                   @input="$v.name.$touch()"
@@ -57,6 +57,7 @@
                   single-line
                   outlined
                   dense
+                  :color="'#5cb85ccc'"
                   :filled="!surnameIsTouched"
                   @focus="surnameIsTouched = true"
                   @blur="surnameIsTouched = false"
@@ -76,6 +77,7 @@
                   item-text="name"
                   item-value="alpha2Code"
                   v-model="country"
+                  :color="'#5cb85ccc'"
                   :placeholder="$t('register_page.country_placeholder')"
                   :error-messages="countryErrors"
                   :items="countries"
@@ -105,6 +107,7 @@
                   clearable
                   item-text="text"
                   v-model="user"
+                  :color="'#5cb85ccc'"
                   :placeholder="$t('register_page.user_type_placeholder')"
                   :error-messages="userTypeErrors"
                   :items="userTypes"
@@ -116,6 +119,9 @@
                     userTypeIsTouched = false;
                   "
                 >
+                <template v-slot:item="{ item }">
+                  <span>{{ $t('inData.' + item.text) }}</span>
+                </template>
                 </v-select>
               </div>
             </div>
@@ -132,7 +138,7 @@
                   dense
                   :placeholder="$t('register_page.email_placeholder')"
                   :filled="!emailIsTouched"
-                  color="success"
+                  :color="'#5cb85ccc'"
                   @input="$v.email.$touch()"
                   @focus="emailIsTouched = true"
                   @blur="
@@ -151,6 +157,7 @@
                   single-line
                   outlined
                   dense
+                  :color="'#5cb85ccc'"
                   :placeholder="$t('register_page.password_placeholder')"
                   :type="showPassword ? 'text' : 'password'"
                   :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
@@ -171,25 +178,26 @@
                 <div class="d-flex align-center justify-space-between">
                   <v-radio-group
                     v-model="haveAvatar"
-                    color="success"
+                    :color="'#5cb85ccc'"
                     mandatory
                     row
                   >
                     <v-radio
-                      color="success"
+                      :color="'#5cb85ccc'"
                       :label="$t('register_page.with_avatar')"
                       :value="1"
                     ></v-radio>
                     <v-radio
-                      color="success"
+                      :color="'#5cb85ccc'"
                       :label="$t('register_page.without_avatar')"
                       :value="2"
                     ></v-radio>
                   </v-radio-group>
                   <v-btn
                     @click="avatarModalObject.open = true"
+                    dark
                     v-if="haveAvatar === 2"
-                    color="success"
+                    :color="'#5cb85ccc'"
                     small
                   >
                     <v-icon small class="pr-2">mdi-drama-masks</v-icon>
@@ -206,8 +214,9 @@
               large
               dense
               block
+              dark
               class="mr-4 mt-3 mb-4 text-capitalize register-btn"
-              color="success"
+              :color="'#5cb85ccc'"
               :disabled="spinner"
               @click="saveUser()"
             >
@@ -233,7 +242,7 @@
             </div>
           </form>
           <div class="rss-btn cpointer" @click="externalLogin('google')">
-            <img width="25" src="./../../assets/img/google.png" />
+            <img width="22" src="./../../assets/icons/google.svg" />
             <span class="pl-2">Google</span>
           </div>
           <!-- <div class="rss-btn cpointer" @click="externalLogin('github')">
@@ -358,7 +367,6 @@ export default {
   },
   created() {
     this.loadData();
-    this.avatarModalObject.title = this.$t('inData.select_avatar');
   },
   methods: {
     saveUser() {
@@ -385,19 +393,22 @@ export default {
       this.userTypes = [
         {
           id: 1,
-          text: this.$t('inData.particular')
+          text: 'particular'
         },
         {
           id: 2,
-          text: this.$t('inData.business')
+          text: 'business'
         }
       ]
     },
     getUserIp() {
-      ServicesRegister.getClientIp().then((response) => {
-        let ip = response.data.ip;
-        this.getUserCountryByIp(ip);
+      axios.get('http://localhost:8080/?format=json').then((response) => {
+        console.log('ressss',response);
       });
+      // ServicesRegister.getClientIp().then((response) => {
+      //   let ip = response.data.ip;
+      //   this.getUserCountryByIp(ip);
+      // });
     },
     getUserCountryByIp(ip) {
       let payload = {
@@ -453,7 +464,7 @@ export default {
       let payload = {
         name: this.name,
         surname: this.surname,
-        country: this.country,
+        country: this.country.alpha2Code,
         userType: this.user.text,
         email: this.email,
         password: this.password,
@@ -493,10 +504,13 @@ export default {
   height: calc(100vh - 110px);
   overflow: auto;
 }
+.first-wrapper{
+  overflow-y: hidden;
+}
 .form-wrapper {
   margin: 0 auto;
   margin-top: 20px;
-  width: 95%;
+  width: 85%;
 }
 .header-register-wrapper {
   margin: 0 auto;

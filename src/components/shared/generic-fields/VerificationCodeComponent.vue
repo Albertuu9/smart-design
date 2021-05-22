@@ -16,7 +16,7 @@
           v-bind="attrs"
           v-on="on"
           icon
-          color="success"
+          :color="'#5cb85ccc'"
           class="ml-3"
           @click="sendVerificationCode"
         >

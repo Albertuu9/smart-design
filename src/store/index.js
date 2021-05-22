@@ -29,9 +29,13 @@ export default new Vuex.Store({
   },
   actions: {
     getUserData({commit}, payload) {
-      return ServicesUser.getUserDataById(payload).then((data) => {
-        commit('setUser',data.user[0]);
-      })
+      if(payload.id.name) {
+        commit('setUser',payload.id);
+      } else {
+        return ServicesUser.getUserDataById(payload).then((data) => {
+          commit('setUser',data.user[0]);
+        })
+      }
     }
   },
 })

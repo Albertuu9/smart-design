@@ -22,7 +22,7 @@
                 : ''
             "
             :filled="!emailIsTouched"
-            color="success"
+            :color="'#5cb85ccc'"
             @input="
               $v.email.$touch();
               checkMail();
@@ -42,7 +42,7 @@
           <v-btn
             :disabled="!isMailExists"
             icon
-            color="success"
+            :color="'#5cb85ccc'"
             v-bind="attrs"
             v-on="on"
             text

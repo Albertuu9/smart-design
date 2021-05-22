@@ -1,5 +1,25 @@
 <template>
   <div class="pa-2 avatar-selection-wrapper">
+    <div class="d-flex align-center">
+      <div class="filter-title">
+        <h4 v-if="filterText">Filtrado por: {{ filterText }}</h4>
+      </div>
+      <div class="d-flex row-avatar">
+        <v-select
+          class="pt-1"
+          return-object
+          single-line
+          dense
+          ripple
+          item-text="text"
+          item-value="id"
+          v-model="category"
+          placeholder="Seleccionar categoría"
+          :items="categories"
+          @change="filterAvatars($event)"
+        ></v-select>
+      </div>
+    </div>
     <div class="d-flex flex-wrap body-wrapper mb-5">
       <div
         class="d-flex flex-column flex-wrap align-center justify-center spinner-wrapper"
@@ -10,7 +30,7 @@
       <div class="d-flex flex-row flex-wrap row-avatar-wrapper">
         <div
           class="d-flex align-center avatar-wrapper justify-center"
-          v-for="(avatar, index) in avatars"
+          v-for="(avatar, index) in filteredAvatars"
           :key="index"
         >
           <div>
@@ -36,6 +56,23 @@ export default {
       avatars: [],
       currentPath: "",
       spinner: false,
+      filteredAvatars: [],
+      filterText: "",
+      categories: [
+        {
+          id: 0,
+          text: "Todos",
+        },
+        {
+          id: 1,
+          text: "Terror",
+        },
+        {
+          id: 2,
+          text: "Monstruos",
+        },
+      ],
+      category: 0,
     };
   },
   mounted() {
@@ -48,11 +85,11 @@ export default {
     loadData() {
       this.spinner = true;
       this.loadAvatars().then((response) => {
-        if(response && response.code === 200) {
+        if (response && response.code === 200) {
           this.spinner = false;
           this.avatars = response.data.standardAvatars;
+          this.filteredAvatars = this.avatars;
         }
-        
       });
     },
     selectAvatar(avatar) {
@@ -64,7 +101,7 @@ export default {
         this.resetAvatarSelected(avatar);
         let listAvatars = [];
         listAvatars = this.checkAvatars(avatar);
-        listAvatars.forEach((item, index) => {
+        listAvatars.forEach((item) => {
           if (avatar._id === item._id) {
             document
               .getElementById(avatar._id)
@@ -93,9 +130,32 @@ export default {
     checkAvatars(avatar) {
       let listAvatars = [];
       if (avatar.type === "standard") {
-        listAvatars = this.avatars;
+        listAvatars = this.filteredAvatars;
       }
       return listAvatars;
+    },
+    filterAvatars(event) {
+      if (event.id === 0) {
+        this.filteredAvatars = this.avatars;
+        this.filterText = "";
+      } else {
+        this.filteredAvatars = this.avatars.filter(
+          (avatar) => avatar.category === event.id
+        );
+        this.filterText = event.text;
+      }
+      // this.filteredAvatars.forEach((avatar) => {
+      //   let iconClass = "";
+      //   let selectedClass = "";
+      //   if (avatar.type === "standard") {
+      //     iconClass = "avatar-image";
+      //     selectedClass = "selected";
+      //   }
+      //   if (!avatar.block) {
+      //     document.getElementById(avatar._id).setAttribute("class", iconClass);
+      //     document.getElementById(avatar._id).removeAttribute(selectedClass);
+      //   }
+      // });
     },
     // services
     loadAvatars() {
@@ -107,26 +167,34 @@ export default {
 <style lang="scss" scoped>
 .body-wrapper {
   width: 100%;
-  margin-top: 10px;
-  height: 320px;
+  height: 290px;
   overflow: auto;
 }
 .spinner-wrapper {
   width: 100%;
   height: 100%;
 }
+.filter-title {
+  width: 80%;
+  margin-left: 80px;
+}
 .avatar-wrapper {
+  padding-top: 20px;
   width: 20%;
   height: 100px;
-  padding-top: 50px;
 }
 .row-avatar-wrapper {
   width: 100%;
   height: 150px;
   margin: 0px 80px 0px 80px;
 }
+.row-avatar {
+  width: 20%;
+  margin-right: 40px;
+  float: right;
+}
 .avatar-image {
-  width: 70px;
+  width: 60px;
   cursor: pointer;
 }
 .avatar-selection-wrapper {
@@ -148,7 +216,7 @@ div .avatar-block {
   margin-left: -10px;
 }
 .selected {
-  width: 100px;
+  width: 80px;
 }
 .premium-selected {
   width: 120px;

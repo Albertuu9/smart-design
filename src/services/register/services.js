@@ -5,7 +5,7 @@ const ServicesRegister = {
   // get WS all data
   
   getClientIp(){
-    return HTTP.get('https://api.ipify.org/?format=json').then((response) => {
+    return HTTP.get('http://localhost:8080/?format=json').then((response) => {
       return response
     }).catch((error) => {
       return error

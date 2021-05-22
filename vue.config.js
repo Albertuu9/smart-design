@@ -8,9 +8,9 @@ module.exports = {
   },
 
   devServer: {
-    proxy: 'http://localhost:8080'
+    proxy: 'https://api.ipify.org/'
   },
-
+  
   pluginOptions: {
     i18n: {
       locale: 'en',
