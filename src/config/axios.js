@@ -29,8 +29,7 @@ HTTP.interceptors.response.use(
   },
 
   (error) => {
-    if (error.response) {
-
+    if (error.code) {
       // console.log('%c ' + error.response.status + ' - ' + getUrl(error.response.config) + ':', 'color: #a71d5d; font-weight: bold', error.response);
 
       switch (error.response.code) {

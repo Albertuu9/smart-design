@@ -106,6 +106,7 @@
                   outlined
                   clearable
                   item-text="text"
+                  item-value="id"
                   v-model="user"
                   :color="'#5cb85ccc'"
                   :placeholder="$t('register_page.user_type_placeholder')"
@@ -278,6 +279,7 @@ import GoogleLogin from "vue-google-login";
 import ServicesRegister from "./../../services/register/services";
 import ServicesShared from "./../../services/shared/services";
 import ServicesUtil from "./../../services/shared/services";
+import axios from 'axios';
 
 export default {
   mixins: [validationMixin],
@@ -402,13 +404,10 @@ export default {
       ]
     },
     getUserIp() {
-      axios.get('http://localhost:8080/?format=json').then((response) => {
-        console.log('ressss',response);
+      ServicesRegister.getUserIp().then((response) => {
+        let ip = response.data.ip;
+        this.getUserCountryByIp(ip);
       });
-      // ServicesRegister.getClientIp().then((response) => {
-      //   let ip = response.data.ip;
-      //   this.getUserCountryByIp(ip);
-      // });
     },
     getUserCountryByIp(ip) {
       let payload = {
@@ -465,7 +464,7 @@ export default {
         name: this.name,
         surname: this.surname,
         country: this.country.alpha2Code,
-        userType: this.user.text,
+        userType: this.user.id,
         email: this.email,
         password: this.password,
         avatar: this.avatar,

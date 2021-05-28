@@ -33,7 +33,15 @@ export default new Vuex.Store({
         commit('setUser',payload.id);
       } else {
         return ServicesUser.getUserDataById(payload).then((data) => {
-          commit('setUser',data.user[0]);
+          if(data.code === 200) {
+            commit('setUser',data.user[0]);
+          } else {
+            switch(response.data.code) {
+              case 401:
+                this.$toast.error(this.$t("generic.token_not_valid"));
+              break;
+            }
+          }
         })
       }
     }

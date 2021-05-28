@@ -21,12 +21,7 @@
       </div>
     </div>
     <div class="d-flex flex-wrap body-wrapper mb-5">
-      <div
-        class="d-flex flex-column flex-wrap align-center justify-center spinner-wrapper"
-        v-if="spinner"
-      >
-        <v-icon x-large color="green">mdi mdi-loading mdi-spin</v-icon>
-      </div>
+      <SpinnerPlatform v-if="spinner"/>
       <div class="d-flex flex-row flex-wrap row-avatar-wrapper">
         <div
           class="d-flex align-center avatar-wrapper justify-center"
@@ -47,9 +42,16 @@
   </div>
 </template>
 <script>
+// services
 import AvatarsServices from "./../../../services/avatars/services";
+// components
+// components
+import SpinnerPlatform from "./../../shared/spinner/SpinnerPlatform";
 export default {
   name: "AvatarSelectionComponent",
+  components: {
+    SpinnerPlatform
+  },
   data() {
     return {
       selectedAvatarsCategory: 0,
@@ -144,18 +146,6 @@ export default {
         );
         this.filterText = event.text;
       }
-      // this.filteredAvatars.forEach((avatar) => {
-      //   let iconClass = "";
-      //   let selectedClass = "";
-      //   if (avatar.type === "standard") {
-      //     iconClass = "avatar-image";
-      //     selectedClass = "selected";
-      //   }
-      //   if (!avatar.block) {
-      //     document.getElementById(avatar._id).setAttribute("class", iconClass);
-      //     document.getElementById(avatar._id).removeAttribute(selectedClass);
-      //   }
-      // });
     },
     // services
     loadAvatars() {
@@ -169,10 +159,6 @@ export default {
   width: 100%;
   height: 290px;
   overflow: auto;
-}
-.spinner-wrapper {
-  width: 100%;
-  height: 100%;
 }
 .filter-title {
   width: 80%;

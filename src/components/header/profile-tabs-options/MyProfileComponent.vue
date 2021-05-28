@@ -1,7 +1,8 @@
 <template>
   <div class="d-flex flex-column content-wrapper">
     <div class="register-wrapper d-flex">
-      <div class="form-wrapper">
+      <SpinnerPlatform v-if="spinner"/>
+      <div class="form-wrapper" v-if="!spinner">
         <form class="d-flex flex-column" @submit.prevent>
           <div class="d-flex flex-row align-center justify-space-between">
             <div class="d-flex flex-column mandatory-wrapper">
@@ -83,6 +84,7 @@
                 outlined
                 clearable
                 item-text="text"
+                item-value="id"
                 v-model="user"
                 :color="'#5cb85ccc'"
                 :placeholder="$t('register_page.user_type_placeholder')"
@@ -126,8 +128,14 @@
             </div>
           </div>
           <div class="footer">
-            <v-btn class="ml-2" dark :color="'#5cb85ccc'" small>
-              {{ $t("generic.save&exit") }}
+            <v-btn
+              class="ml-2"
+              @click="updateUser()"
+              dark
+              :color="'#5cb85ccc'"
+              small
+            >
+              {{ $t("generic.save") }}
             </v-btn>
           </div>
         </form>
@@ -140,9 +148,15 @@ import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 // services
 import ServicesUtil from "./../../../services/shared/services";
+import ServicesRegister from "./../../../services/register/services";
+// components
+import SpinnerPlatform from "./../../shared/spinner/SpinnerPlatform";
 
 export default {
   mixins: [validationMixin],
+  components:{
+    SpinnerPlatform
+  },
   validations: {
     name: { required },
     email: { required, email },
@@ -184,7 +198,6 @@ export default {
     },
     emailErrors() {
       const errors = [];
-      let promises = [];
       if (!this.$v.email.$dirty) return errors;
       !this.$v.email.email && errors.push(this.$t("register_page.error_email"));
       !this.$v.email.required &&
@@ -199,27 +212,24 @@ export default {
         errors.push(this.$t("register_page.error_user_type"));
       return errors;
     },
+    userData() {
+      return this.$store.getters.getUser;
+    },
   },
   created() {
     this.loadData();
   },
   methods: {
-    saveUser() {
+    updateUser() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.spinner = true;
-        this.checkMailExists(this.email).then((response) => {
-          if (response.data.code === 200) {
-            this.$toast.error(this.$t("register_page.error_email_exists"));
-          } else {
-            this.saveNewUser();
-          }
-        });
+        this.updateUserInfo();
       }
     },
     loadData() {
       this.getCountries();
       this.loadUserTypes();
+      this.loadUserData();
     },
     loadUserTypes() {
       this.userTypes = [
@@ -239,10 +249,19 @@ export default {
 
       return textOne.indexOf(searchText) > -1;
     },
+    loadUserData() {
+      this.email = this.userData.email;
+      this.name = this.userData.name;
+      this.surname = this.userData.surname;
+      this.country = this.userData.country;
+      this.user = this.userData.userType;
+    },
     // services
     getCountries() {
+      this.spinner = true;
       ServicesUtil.getCountries()
         .then((response) => {
+          this.spinner = false;
           this.countries = response.data;
         })
         .catch((error) => {
@@ -253,30 +272,47 @@ export default {
       let payload = {
         email: email,
       };
-      //   return ServicesRegister.checkMailExists(payload);
+      return ServicesRegister.checkMailExists(payload);
     },
-    saveNewUser() {
+    updateUserInfo() {
       let payload = {
+        id: this.userData._id,
         name: this.name,
         surname: this.surname,
         country: this.country,
-        userType: this.user.text,
+        userType: this.user.id,
         email: this.email,
-        password: this.password,
-        avatar: this.avatar,
       };
-      //   ServicesRegister.saveNewUser(payload).then((response) => {
-      //     if (response.data.code === 200) {
-      //       this.spinner = false;
-      //       this.$toast.success(this.$t('register_page.success_sign_up'));
-      //       this.saveLoginData(response);
-      //     } else {
-      //       this.spinner = false;
-      //       this.$toast.error(
-      //         this.$t('register_page.error_sign_up')
-      //       );
-      //     }
-      //   });
+      ServicesRegister.updateUserInfo(payload).then((response) => {
+        if (response.data.code === 200) {
+          // fill user data
+          let user = {
+            avatar: response.data.user[0].avatar,
+            country: response.data.user[0].country,
+            email: response.data.user[0].email,
+            isPremium: response.data.user[0].isPremium,
+            name: response.data.user[0].name,
+            role: response.data.user[0].role,
+            surname: response.data.user[0].surname,
+            userType: response.data.user[0].userType,
+            _id: response.data.user[0]._id
+          }
+          this.$store.commit("setUser", user);
+          this.$toast.success(this.$t("my_profile_options.general_info.update_success"));
+        } else {
+          switch(response.data.code) {
+            case 401:
+              this.$toast.error(this.$t("generic.token_not_valid"));
+            break;
+            case 409:
+              this.$toast.error(this.$t("register_page.error_email_exists"));
+            break;
+            case 500:
+              this.$toast.error(this.$t("my_profile_options.general_info.update_failed"));
+            break;
+          }
+        }
+      });
     },
   },
 };
@@ -307,9 +343,9 @@ export default {
 .v-alert small {
   color: white !important;
 }
-.footer{
-    position: absolute;
-    bottom: 15px;
-    right: 20px;
+.footer {
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
 }
 </style>

@@ -2,7 +2,9 @@
     "generic": {
         "next": "Siguiente",
         "save&exit": "Guardar y salir",
-        "back": "Atrás"
+        "save": "Guardar",
+        "back": "Atrás",
+        "token_not_valid": "Error 401: el token no es válido, por favor, vuelve a iniciar sesión"
     },
     "register_page": {
         "required_name": "Nombre*",
@@ -106,5 +108,11 @@
         "medium": "media",
         "high": "alta",
         "send_another_code": "Envíame otro código de verificación"
+    },
+    "my_profile_options": {
+        "general_info": {
+            "update_success": "Datos actualizados correctamente",
+            "update_failed": "Error: No se han podido actualizar los datos correctamente"
+        }
     }
 }

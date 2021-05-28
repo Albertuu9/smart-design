@@ -5,7 +5,7 @@ const ServicesRegister = {
   // get WS all data
   
   getClientIp(){
-    return HTTP.get('http://localhost:8080/?format=json').then((response) => {
+    return HTTP.get('http://localhost:8080').then((response) => {
       return response
     }).catch((error) => {
       return error
@@ -25,6 +25,13 @@ const ServicesRegister = {
       return error
     })
   },
+  updateUserInfo(payload) {
+    return HTTP.post('/updateUserInfo', payload).then((response) => {
+      return response
+    }).catch((error) => {
+      return error
+    })
+  },
   loginGuest() {
     return HTTP.post('/loginGuest').then((response) => {
       return response
@@ -32,8 +39,8 @@ const ServicesRegister = {
       return error
     })
   },
-  getUserIp(payload) {
-    return HTTP.post('/getUserIp', payload).then((response) => {
+  getUserIp() {
+    return HTTP.post('/getUserIp').then((response) => {
       return response
     }).catch((error) => {
       return error
