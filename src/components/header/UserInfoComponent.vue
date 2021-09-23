@@ -27,7 +27,6 @@
           <v-tab-item v-for="(tab, index) in tabsMenu" :key="index">
             <v-card flat>
               <div class="header d-flex px-3 align-center">
-                <h3>{{ tab.title }}</h3>
                 <v-spacer></v-spacer>
                 <v-btn :color="'#aaaaaa'" @click="closeModal" dark icon>
                   <v-icon>mdi-close</v-icon>
@@ -48,14 +47,14 @@
 <script>
 // components
 import MyProfileComponent from './profile-tabs-options/MyProfileComponent';
-import NewPasswordComponent from './profile-tabs-options/NewPasswordComponent';
+import PasswordComponent from './profile-tabs-options/PasswordComponent';
 import ChangeAvatarComponent from './profile-tabs-options/ChangeAvatarComponent';
 import SubscriptionComponent from './profile-tabs-options/SubscriptionComponent';
 export default {
   name: "UserInfoComponent",
   components: {
     MyProfileComponent,
-    NewPasswordComponent,
+    PasswordComponent,
     ChangeAvatarComponent,
     SubscriptionComponent
   },
@@ -77,7 +76,7 @@ export default {
           name: "profile_general_info",
           icon: "mdi-account",
           class: "selected-tab",
-          title: "Mi perfil",
+          title: "",
           body: MyProfileComponent,
           enabled: false,
         },
@@ -86,8 +85,7 @@ export default {
           name: "profile_change_password",
           icon: "mdi-lock",
           class: "selected-tab",
-          title: "Nueva contraseña",
-          body: NewPasswordComponent,
+          body: PasswordComponent,
           enabled: false,
         },
         {
@@ -95,7 +93,6 @@ export default {
           name: "profile_change_avatar",
           icon: "mdi-drama-masks",
           class: "selected-tab",
-          title: "Avatares",
           body: ChangeAvatarComponent,
           enabled: false,
         },
@@ -104,7 +101,6 @@ export default {
           name: "profile_payments_management",
           icon: "mdi-cash",
           class: "selected-tab",
-          title: "Mis subscripciones",
           body: SubscriptionComponent,
           enabled: false,
         },
@@ -132,7 +128,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .wrapper {
-  height: 600px;
+  height: 500px;
 }
 .header{
   height: 50px;
@@ -163,5 +159,6 @@ export default {
 .selected-tab .v-icon {
   color: #ffffff;
 }
+
 
 </style>

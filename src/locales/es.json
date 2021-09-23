@@ -109,10 +109,16 @@
         "high": "alta",
         "send_another_code": "Envíame otro código de verificación"
     },
+    "avatars_modal": {
+        "filter_text": "Filtrado por:"
+    },
     "my_profile_options": {
         "general_info": {
             "update_success": "Datos actualizados correctamente",
             "update_failed": "Error: No se han podido actualizar los datos correctamente"
+        },
+        "avatar": {
+            "update_success": "Avatar actualizado correctamente"
         }
     }
 }

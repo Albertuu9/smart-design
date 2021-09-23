@@ -42,6 +42,14 @@ const ServicesLogin = {
         })
     },
 
+    updateAvatar(payload) {
+        return HTTP.post('/updateAvatar', payload).then((response) => {
+            return response
+        }).catch((error) => {
+            return error
+        })
+    },
+
     checkUserById(payload) {
         return HTTP.post('/checkUserById', payload).then((response) => {
             return response

@@ -1,10 +1,10 @@
 <template>
-  <div class="pa-2 avatar-selection-wrapper">
+  <div :style="{ 'background-color': userMode ? '#ffffff' : '#f7f7f7' }" class="pa-2 avatar-selection-wrapper">
     <div class="d-flex align-center">
       <div class="filter-title">
-        <h4 v-if="filterText">Filtrado por: {{ filterText }}</h4>
+        <h4 v-if="filterText">{{ $t('avatars_modal.filter_text') + ' ' + filterText }}</h4>
       </div>
-      <div class="d-flex row-avatar">
+      <div class="d-flex row-avatar" :style="{'margin-right': userMode !== false ? '10px' : '40px'}">
         <v-select
           class="pt-1"
           return-object
@@ -22,7 +22,7 @@
     </div>
     <div class="d-flex flex-wrap body-wrapper mb-5">
       <SpinnerPlatform v-if="spinner"/>
-      <div class="d-flex flex-row flex-wrap row-avatar-wrapper">
+      <div class="d-flex flex-row flex-wrap row-avatar-wrapper" :style="{'margin': userMode !== false ? '0px 20px 0px 20px' : '0px 80px 0px 80px'}">
         <div
           class="d-flex align-center avatar-wrapper justify-center"
           v-for="(avatar, index) in filteredAvatars"
@@ -45,10 +45,15 @@
 // services
 import AvatarsServices from "./../../../services/avatars/services";
 // components
-// components
 import SpinnerPlatform from "./../../shared/spinner/SpinnerPlatform";
 export default {
   name: "AvatarSelectionComponent",
+  props:{
+    userMode :{
+      type: Boolean,
+      required: false
+    }
+  },
   components: {
     SpinnerPlatform
   },
@@ -156,14 +161,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .body-wrapper {
-  width: 100%;
+  width: 100%; 
   height: 290px;
   overflow: auto;
 }
 .filter-title {
+  margin-left: 50px;
   width: 80%;
-  margin-left: 80px;
 }
+
 .avatar-wrapper {
   padding-top: 20px;
   width: 20%;
@@ -172,11 +178,9 @@ export default {
 .row-avatar-wrapper {
   width: 100%;
   height: 150px;
-  margin: 0px 80px 0px 80px;
 }
 .row-avatar {
   width: 20%;
-  margin-right: 40px;
   float: right;
 }
 .avatar-image {
@@ -186,7 +190,7 @@ export default {
 .avatar-selection-wrapper {
   max-height: 500px;
   height: 100%;
-  background-color: #f7f7f7;
+  width: 100%;
 }
 .premium-image {
   width: 80px;

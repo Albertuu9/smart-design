@@ -3,7 +3,7 @@
     <div class="d-flex flex-column">
       <span>{{ $t('email_validation.email_text') }}</span>
       <form class="form-wrapper mt-4 mb-4" @submit.prevent>
-        <label>{{ $t('email_validation.email_label') }}</label>
+        <label class="input-label">{{ $t('email_validation.email_label') }}</label>
         <div class="d-flex align-center ">
           <v-text-field
             v-model="email"

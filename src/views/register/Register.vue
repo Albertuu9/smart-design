@@ -28,7 +28,7 @@
           <form class="d-flex flex-column" @submit.prevent>
             <div class="d-flex flex-row align-center justify-space-between">
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>{{ $t('register_page.required_name') }}</label>
+                <label class="input-label">{{ $t('register_page.required_name') }}</label>
                 <v-text-field
                   v-model="name"
                   class="pt-1 pr-2"
@@ -49,7 +49,7 @@
                 ></v-text-field>
               </div>
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>{{ $t('register_page.surname') }}</label>
+                <label class="input-label">{{ $t('register_page.surname') }}</label>
                 <v-text-field
                   class="pt-1"
                   v-model="surname"
@@ -66,7 +66,7 @@
             </div>
             <div class="d-flex flex-row align-center justify-space-between">
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>{{ $t('register_page.required_country') }}</label>
+                <label class="input-label">{{ $t('register_page.required_country') }}</label>
                 <v-autocomplete
                   class="pt-1 pr-2"
                   return-object
@@ -97,7 +97,7 @@
                 </v-autocomplete>
               </div>
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>{{ $t('register_page.required_user_type') }}</label>
+                <label class="input-label">{{ $t('register_page.required_user_type') }}</label>
                 <v-select
                   class="pt-1"
                   return-object
@@ -128,7 +128,7 @@
             </div>
             <div class="d-flex flex-row align-center justify-space-between">
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>{{ $t('register_page.required_email') }}</label>
+                <label class="input-label">{{ $t('register_page.required_email') }}</label>
                 <v-text-field
                   v-model="email"
                   class="pt-1 pr-2"
@@ -149,7 +149,7 @@
                 ></v-text-field>
               </div>
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>{{ $t('register_page.required_password') }}</label>
+                <label class="input-label">{{ $t('register_page.required_password') }}</label>
                 <v-text-field
                   class="pt-1"
                   v-model="password"
@@ -175,7 +175,7 @@
             </div>
             <div class="d-flex flex-row align-center justify-space-between">
               <div class="d-flex flex-column mandatory-wrapper">
-                <label>{{ $t('register_page.avatar') }}</label>
+                <label class="input-label">{{ $t('register_page.avatar') }}</label>
                 <div class="d-flex align-center justify-space-between">
                   <v-radio-group
                     v-model="haveAvatar"
@@ -185,12 +185,12 @@
                   >
                     <v-radio
                       :color="'#5cb85ccc'"
-                      :label="$t('register_page.with_avatar')"
+                      :label="$t('register_page.without_avatar')"
                       :value="1"
                     ></v-radio>
                     <v-radio
                       :color="'#5cb85ccc'"
-                      :label="$t('register_page.without_avatar')"
+                      :label="$t('register_page.with_avatar')"
                       :value="2"
                     ></v-radio>
                   </v-radio-group>
@@ -463,12 +463,16 @@ export default {
       let payload = {
         name: this.name,
         surname: this.surname,
-        country: this.country.alpha2Code,
         userType: this.user.id,
         email: this.email,
         password: this.password,
         avatar: this.avatar,
       };
+      if(this.country.alpha2Code) {
+        payload.country = this.country.alpha2Code;
+      } else {
+        payload.country = this.country;
+      }
       ServicesRegister.saveNewUser(payload).then((response) => {
         if (response.data.code === 200) {
           this.spinner = false;

@@ -1,10 +1,11 @@
 <template>
   <div>
-    <label class="password-label">{{ title }}</label>
+    <label class="input-label">{{ title }}</label>
     <v-text-field
       class="mt-1"
       hide-details
       v-model="password"
+      :color="'#5cb85ccc'"
       :placeholder="placeholder"
       single-line
       outlined
@@ -22,7 +23,8 @@
           passwordValidation.icon
         }}</v-icon>
         <small :class="passwordValidation.class" class="ml-1 pt-1"
-          >{{ $t('shared.password_security') }} {{ passwordValidation.security }}</small
+          >{{ $t("shared.password_security") }}
+          {{ passwordValidation.security }}</small
         >
       </div>
     </transition>
@@ -39,6 +41,10 @@ export default {
     placeholder: {
       type: String,
       required: true,
+    },
+    resetPassword: {
+      type: Boolean,
+      required: false,
     },
   },
   data() {
@@ -57,17 +63,17 @@ export default {
     password: {
       handler(value) {
         if (this.lightValidation(value)) {
-          this.passwordValidation.security = this.$t('shared.low');
+          this.passwordValidation.security = this.$t("shared.low");
           this.passwordValidation.icon = "mdi-lock-remove";
           this.passwordValidation.class = "low-security";
         }
         if (this.mediumValidation(value)) {
-          this.passwordValidation.security = this.$t('shared.medium');
+          this.passwordValidation.security = this.$t("shared.medium");
           this.passwordValidation.icon = "mdi-lock-minus";
           this.passwordValidation.class = "medium-security";
         }
         if (this.strengthValidation(value)) {
-          this.passwordValidation.security = this.$t('shared.high');
+          this.passwordValidation.security = this.$t("shared.high");
           this.passwordValidation.icon = "mdi-lock-check";
           this.passwordValidation.class = "high-security";
         }
@@ -79,6 +85,9 @@ export default {
       },
     },
     deep: true,
+  },
+  renderTriggered({ key, target, type }) {
+    console.log({ key, target, type })
   },
   methods: {
     lightValidation(value) {
@@ -105,10 +114,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.password-label {
-  font-size: 15px;
-  color: #777777 !important;
-}
 .low-security {
   color: red;
 }

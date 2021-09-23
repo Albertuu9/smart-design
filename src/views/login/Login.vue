@@ -21,7 +21,7 @@
             <span class="main-logo pr-3">SD</span>
             <span class="main-title">SMARTDESIGN</span>
           </div>
-          <label>{{ $t('login_page.email') }}</label>
+          <label class="input-label">{{ $t('login_page.email') }}</label>
           <v-text-field
             v-model="email"
             class="pt-1"
@@ -41,7 +41,7 @@
               emailIsTouched = false;
             "
           ></v-text-field>
-          <label>{{ $t('login_page.password') }}</label>
+          <label class="input-label">{{ $t('login_page.password') }}</label>
           <small
             @click="recoverPasswordObject.open = true"
             class="float-right label-remember-pass cpointer"

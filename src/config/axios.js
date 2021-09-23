@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+// prod
 const HTTP = axios.create({
   // baseURL: process.env.VUE_APP_PROD_URL,
   baseURL: process.env.VUE_APP_DEV_URL

@@ -82,6 +82,18 @@ router.beforeEach((to, from, next) => {
             next();
           } else {
             Vue.$toast.error("No puedes seguir usando la plataforma, por favor, inicia sesión o accede como invitado");
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            if (localStorage.getItem("googleLogin")) {
+              localStorage.removeItem("googleLogin");
+              let myWindow = window.open(
+                "https://mail.google.com/mail/u/0/?logout&hl=en"
+              );
+              setTimeout(() => {
+                myWindow.close();
+              }, 1000);
+            }
+            localStorage.removeItem("googleLogin");
             next('/login');
           } 
       } else {

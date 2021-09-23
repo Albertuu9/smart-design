@@ -75,22 +75,7 @@ export default {
   data() {
     return {
       darkMode: null,
-      items: [
-        {
-          id: 1,
-          text: "my_profile",
-          icon: "mdi-account",
-          disabled: false,
-        },
-        { id: 2, text: "my_projects", icon: "mdi-television", disabled: false },
-        {
-          id: 3,
-          text: "customization",
-          icon: "mdi-palette",
-          disabled: false,
-        },
-        { id: 4, text: "logout", icon: "mdi-power", disabled: false },
-      ],
+      items: [],
       profileModalOptions: {
         open: false,
         width: null,
@@ -101,6 +86,35 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+  },
+  watch: {
+    user: {
+      handler(value) {
+        if(value){
+          if(value.isGuest){
+            this.items = [
+              { id: 4, text: "logout", icon: "mdi-power", disabled: false },
+            ]
+          } else {
+            this.items = [ {
+                id: 1,
+                text: "my_profile",
+                icon: "mdi-account",
+                disabled: false,
+              },
+              { id: 2, text: "my_projects", icon: "mdi-television", disabled: false },
+              {
+                id: 3,
+                text: "customization",
+                icon: "mdi-palette",
+                disabled: false,
+              },
+              { id: 4, text: "logout", icon: "mdi-power", disabled: false }
+            ];
+          }
+        }
+      },deep: true
+    }
   },
   methods: {
     setOptions(id) {
@@ -135,6 +149,7 @@ export default {
           myWindow.close();
         }, 1000);
       }
+      localStorage.removeItem("googleLogin");
       this.$router.push("/login");
     },
   },
