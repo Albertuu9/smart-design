@@ -21,7 +21,7 @@
           class="ml-2"
           @click="updateUserPassword()"
           dark
-          :color="'#5cb85ccc'"
+          :color="'#02bb8ccc'"
           small
         >
           {{ $t("generic.save") }}

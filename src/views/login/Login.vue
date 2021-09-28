@@ -25,13 +25,14 @@
           <v-text-field
             v-model="email"
             class="pt-1"
+            autocomplete="off"
             :error-messages="emailErrors"
             required
             single-line
             outlined
             append-icon="mdi-email"
             dense
-            :color="'#5cb85ccc'"
+            :color="'#02bb8ccc'"
             :filled="!emailIsTouched"
             :placeholder="$t('login_page.email_placeholder')"
             @input="$v.email.$touch()"
@@ -49,6 +50,7 @@
           >
           <v-text-field
             v-model="password"
+            autocomplete="off"
             class="pt-1"
             required
             type="password"
@@ -56,7 +58,7 @@
             outlined
             dense
             append-icon="mdi-lock"
-            :color="'#5cb85ccc'"
+            :color="'#02bb8ccc'"
             :error-messages="passwordErrors"
             :placeholder="$t('login_page.password_placeholder')"
             :filled="!passIsTouched"
@@ -74,7 +76,7 @@
             block
             :dark="!spinner"
             class="mr-4 mt-3 mb-4 text-capitalize"
-            :color="'#5cb85ccc'"
+            :color="'#02bb8ccc'"
             :disabled="spinner"
             @click="submit"
           >

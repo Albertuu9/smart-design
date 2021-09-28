@@ -31,13 +31,14 @@
                 <label class="input-label">{{ $t('register_page.required_name') }}</label>
                 <v-text-field
                   v-model="name"
+                  autocomplete="off"
                   class="pt-1 pr-2"
                   :error-messages="nameErrors"
                   required
                   single-line
                   outlined
                   dense
-                  :color="'#5cb85ccc'"
+                  :color="'#02bb8ccc'"
                   :placeholder="$t('register_page.name_placeholder')"
                   :filled="!nameIsTouched"
                   @input="$v.name.$touch()"
@@ -52,12 +53,13 @@
                 <label class="input-label">{{ $t('register_page.surname') }}</label>
                 <v-text-field
                   class="pt-1"
+                  autocomplete="off"
                   v-model="surname"
                   :placeholder="$t('register_page.surname_placeholder')"
                   single-line
                   outlined
                   dense
-                  :color="'#5cb85ccc'"
+                  :color="'#02bb8ccc'"
                   :filled="!surnameIsTouched"
                   @focus="surnameIsTouched = true"
                   @blur="surnameIsTouched = false"
@@ -77,7 +79,7 @@
                   item-text="name"
                   item-value="alpha2Code"
                   v-model="country"
-                  :color="'#5cb85ccc'"
+                  :color="'#02bb8ccc'"
                   :placeholder="$t('register_page.country_placeholder')"
                   :error-messages="countryErrors"
                   :items="countries"
@@ -108,7 +110,7 @@
                   item-text="text"
                   item-value="id"
                   v-model="user"
-                  :color="'#5cb85ccc'"
+                  :color="'#02bb8ccc'"
                   :placeholder="$t('register_page.user_type_placeholder')"
                   :error-messages="userTypeErrors"
                   :items="userTypes"
@@ -134,12 +136,13 @@
                   class="pt-1 pr-2"
                   :error-messages="emailErrors"
                   required
+                  autocomplete="off"
                   single-line
                   outlined
                   dense
                   :placeholder="$t('register_page.email_placeholder')"
                   :filled="!emailIsTouched"
-                  :color="'#5cb85ccc'"
+                  :color="'#02bb8ccc'"
                   @input="$v.email.$touch()"
                   @focus="emailIsTouched = true"
                   @blur="
@@ -157,8 +160,9 @@
                   required
                   single-line
                   outlined
+                  autocomplete="off"
                   dense
-                  :color="'#5cb85ccc'"
+                  :color="'#02bb8ccc'"
                   :placeholder="$t('register_page.password_placeholder')"
                   :type="showPassword ? 'text' : 'password'"
                   :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
@@ -179,17 +183,17 @@
                 <div class="d-flex align-center justify-space-between">
                   <v-radio-group
                     v-model="haveAvatar"
-                    :color="'#5cb85ccc'"
+                    :color="'#02bb8ccc'"
                     mandatory
                     row
                   >
                     <v-radio
-                      :color="'#5cb85ccc'"
+                      :color="'#02bb8ccc'"
                       :label="$t('register_page.without_avatar')"
                       :value="1"
                     ></v-radio>
                     <v-radio
-                      :color="'#5cb85ccc'"
+                      :color="'#02bb8ccc'"
                       :label="$t('register_page.with_avatar')"
                       :value="2"
                     ></v-radio>
@@ -198,7 +202,7 @@
                     @click="avatarModalObject.open = true"
                     dark
                     v-if="haveAvatar === 2"
-                    :color="'#5cb85ccc'"
+                    :color="'#02bb8ccc'"
                     small
                   >
                     <v-icon small class="pr-2">mdi-drama-masks</v-icon>
@@ -215,9 +219,9 @@
               large
               dense
               block
-              dark
+              :dark="!spinner"
               class="mr-4 mt-3 mb-4 text-capitalize register-btn"
-              :color="'#5cb85ccc'"
+              :color="'#02bb8ccc'"
               :disabled="spinner"
               @click="saveUser()"
             >
@@ -414,7 +418,7 @@ export default {
         ip: ip,
       };
       ServicesRegister.getUserCountryByIp(payload).then((response) => {
-        this.country = response.data.data.country;
+        this.country = response.data.data.country.toLowerCase();
       });
     },
     countriesFilter(item, queryText) {

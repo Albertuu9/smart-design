@@ -13,7 +13,7 @@
     </v-tooltip>
         <v-tooltip top>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn dark :color="'#5cb85ccc'" class="ml-2" small v-bind="attrs" v-on="on">
+        <v-btn dark :color="'#02bb8ccc'" class="ml-2" small v-bind="attrs" v-on="on">
           <v-icon small class="pr-1 icons">
             mdi-file-code
           </v-icon>

@@ -2,7 +2,7 @@
   <v-dialog persistent v-model="value" :width="width" :height="height">
     <v-card>
       <v-card-title class="lighten-1 title-modal d-flex align-center pa-4">
-        <v-icon :color="'#5cb85ccc'" class="pr-2" v-if="icon">{{ icon }}</v-icon>
+        <v-icon :color="'#02bb8ccc'" class="pr-2" v-if="icon">{{ icon }}</v-icon>
         <span class="title">{{ title }}</span>
         <v-spacer></v-spacer>
         <v-btn :color="'#aaaaaa'" @click="closeModal" dark icon>
@@ -20,7 +20,7 @@
         <v-btn :color="'#aaaaaa'" class="white--text text-capitalize" small @click="closeModal">
           {{ $t('generic_modal.cancel') }}
         </v-btn>
-        <v-btn :color="'#5cb85ccc'" dark class="text-capitalize" small @click="saveData">
+        <v-btn :color="'#02bb8ccc'" dark class="text-capitalize" small @click="saveData">
           {{ $t('generic_modal.accept') }}
         </v-btn>
       </v-card-actions>
@@ -104,6 +104,6 @@ export default {
   border: none;
 }
 .title-modal{
-  color: #5cb85ccc;
+  color: #02bb8ccc;
 }
 </style>

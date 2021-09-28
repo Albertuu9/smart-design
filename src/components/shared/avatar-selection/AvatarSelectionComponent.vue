@@ -1,10 +1,13 @@
 <template>
   <div :style="{ 'background-color': userMode ? '#ffffff' : '#f7f7f7' }" class="pa-2 avatar-selection-wrapper">
     <div class="d-flex align-center">
-      <div class="filter-title">
-        <h4 v-if="filterText">{{ $t('avatars_modal.filter_text') + ' ' + filterText }}</h4>
+      <div v-if="userMode"  class="filter-title">
+        <h4 v-if="filterText">{{ $t('avatars_modal.filter_text')}}
+          <span :class="filterClass">{{ filterText }}</span>
+        </h4>
+        <small v-if="(user.isPremium + 1) < category && filterText && filterText !== 'Standard'">{{ $t('avatars_modal.filter_subtext') + '' + filterText }}</small>
       </div>
-      <div class="d-flex row-avatar" :style="{'margin-right': userMode !== false ? '10px' : '40px'}">
+      <div v-if="userMode"  class="d-flex row-avatar" :style="{'margin-right': userMode !== false ? '10px' : '40px'}">
         <v-select
           class="pt-1"
           return-object
@@ -30,7 +33,7 @@
         >
           <div>
             <img
-              class="avatar-image"
+              :class="userMode ? (user.isPremium + 1) >= avatar.category ? (category === 3 ? 'premium-image' : 'avatar-image') : (category === 3 && category !== 1 ? 'premium-block-image' : 'block-image') : 'avatar-image'"
               :id="avatar._id"
               :src="avatar.path"
               @click="selectAvatar(avatar)"
@@ -59,28 +62,36 @@ export default {
   },
   data() {
     return {
-      selectedAvatarsCategory: 0,
       avatars: [],
       currentPath: "",
       spinner: false,
       filteredAvatars: [],
       filterText: "",
+      filterClass: "",
       categories: [
         {
-          id: 0,
-          text: "Todos",
-        },
-        {
           id: 1,
-          text: "Terror",
+          text: "Standard",
+          class: "standard"
         },
         {
           id: 2,
-          text: "Monstruos",
+          text: "Gold",
+          class: "gold"
+        },
+        {
+          id: 3,
+          text: "Emerald",
+          class: "emerald"
         },
       ],
-      category: 0,
+      category: 1,
     };
+  },
+  computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
   },
   mounted() {
     this.currentPath = this.$router.currentRoute.path;
@@ -94,17 +105,36 @@ export default {
       this.loadAvatars().then((response) => {
         if (response && response.code === 200) {
           this.spinner = false;
-          this.avatars = response.data.standardAvatars;
-          this.filteredAvatars = this.avatars;
+          this.avatars = response.data.standardAvatars.concat(response.data.goldAvatars).concat(response.data.emeraldAvatars);
+          this.filteredAvatars = this.avatars.filter(
+          (avatar) => avatar.category === this.category
+            );
+          this.filterText = this.categories[0].text;
+          this.filterClass = this.categories[0].class;
         }
       });
     },
     selectAvatar(avatar) {
-      if (!avatar.block) {
+      if ((this.user && (this.user.isPremium + 1) >= avatar.category) && this.userMode) {
         let selectedClass = "";
-        if (avatar.type === "standard") {
+        if (avatar.type === "standard" || avatar.type === "gold" ) {
           selectedClass = "selected";
+        } else {
+          selectedClass = "premium-selected";
         }
+        this.resetAvatarSelected(avatar);
+        let listAvatars = [];
+        listAvatars = this.checkAvatars(avatar);
+        listAvatars.forEach((item) => {
+          if (avatar._id === item._id) {
+            document
+              .getElementById(avatar._id)
+              .setAttribute("class", selectedClass);
+          }
+        });
+        this.$emit("emitData", avatar.path);
+      } else if(!this.userMode){
+        let selectedClass = "selected";
         this.resetAvatarSelected(avatar);
         let listAvatars = [];
         listAvatars = this.checkAvatars(avatar);
@@ -122,9 +152,12 @@ export default {
       let listAvatars = [];
       let iconClass = "";
       let selectedClass = "";
-      if (avatar.type === "standard") {
+      if (avatar.type === "standard" || avatar.type === "gold" ) {
         iconClass = "avatar-image";
         selectedClass = "selected";
+      } else {
+        iconClass = "premium-image";
+        selectedClass = "premium-selected";
       }
       listAvatars = this.checkAvatars(avatar);
       listAvatars.forEach((avatar) => {
@@ -136,21 +169,16 @@ export default {
     },
     checkAvatars(avatar) {
       let listAvatars = [];
-      if (avatar.type === "standard") {
-        listAvatars = this.filteredAvatars;
-      }
+      listAvatars = this.filteredAvatars;
       return listAvatars;
     },
     filterAvatars(event) {
-      if (event.id === 0) {
-        this.filteredAvatars = this.avatars;
-        this.filterText = "";
-      } else {
-        this.filteredAvatars = this.avatars.filter(
+      this.filteredAvatars = this.avatars.filter(
           (avatar) => avatar.category === event.id
         );
-        this.filterText = event.text;
-      }
+      this.filterText = event.text;
+      this.filterClass = event.class;
+      this.category = event.id;
     },
     // services
     loadAvatars() {
@@ -193,11 +221,15 @@ export default {
   width: 100%;
 }
 .premium-image {
-  width: 80px;
+  width: 70px;
   cursor: pointer;
 }
 .premium-block-image {
-  width: 80px;
+  width: 70px;
+  filter: grayscale(100%);
+}
+.block-image {
+  width: 60px;
   filter: grayscale(100%);
 }
 div .avatar-block {
@@ -209,6 +241,15 @@ div .avatar-block {
   width: 80px;
 }
 .premium-selected {
-  width: 120px;
+  width: 90px;
+}
+.standard {
+  color: #1976d2;
+}
+.gold {
+  color: #887101;
+}
+.emerald {
+  color: #009B77;
 }
 </style>

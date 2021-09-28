@@ -110,7 +110,8 @@
         "send_another_code": "Envíame otro código de verificación"
     },
     "avatars_modal": {
-        "filter_text": "Filtrado por:"
+        "filter_text": "Filtrado por: ",
+        "filter_subtext": "Para desbloquear estos avatares, obtén la subscripción "
     },
     "my_profile_options": {
         "general_info": {

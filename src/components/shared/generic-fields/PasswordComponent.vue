@@ -3,9 +3,10 @@
     <label class="input-label">{{ title }}</label>
     <v-text-field
       class="mt-1"
+      autocomplete="off"
       hide-details
       v-model="password"
-      :color="'#5cb85ccc'"
+      :color="'#02bb8ccc'"
       :placeholder="placeholder"
       single-line
       outlined

@@ -152,7 +152,7 @@ export default {
 }
 
 .selected-tab {
-  background-color: #5cb85ccc;
+  background-color: #02bb8ccc;
 }
 
 .selected-tab span,

@@ -8,7 +8,7 @@
           class="ml-2"
           @click="updateUserAvatar()"
           dark
-          :color="'#5cb85ccc'"
+          :color="'#02bb8ccc'"
           small
         >
           {{ $t("generic.save") }}
@@ -38,29 +38,31 @@ export default {
     },
     methods:{
       updateUserAvatar(){
-        let payload = {
-            avatar: this.avatar,
-            id: this.userData._id
-        };
-        LoginService.updateAvatar(payload).then((response) => {
-          if (response.data.code === 200) {
-            let user = {
-            avatar: this.avatar,
-            country: this.userData.country,
-            email: this.userData.email,
-            isPremium: this.userData.isPremium,
-            name: this.userData.name,
-            role: this.userData.role,
-            surname: this.userData.surname,
-            userType: this.userData.userType,
-            _id: this.userData._id
-          }
-          this.$store.commit("setUser", user);
-            this.$toast.success(
-              this.$t("my_profile_options.avatar.update_success")
-            );
-          }
-        });
+          if(this.avatar) {
+            let payload = {
+              avatar: this.avatar,
+              id: this.userData._id
+          };
+          LoginService.updateAvatar(payload).then((response) => {
+            if (response.data.code === 200) {
+              let user = {
+              avatar: this.avatar,
+              country: this.userData.country,
+              email: this.userData.email,
+              isPremium: this.userData.isPremium,
+              name: this.userData.name,
+              role: this.userData.role,
+              surname: this.userData.surname,
+              userType: this.userData.userType,
+              _id: this.userData._id
+            }
+            this.$store.commit("setUser", user);
+              this.$toast.success(
+                this.$t("my_profile_options.avatar.update_success")
+              );
+            }
+          });
+        }
       },
       // emit events
       getAvatar(event){

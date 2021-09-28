@@ -8,6 +8,7 @@
           <v-text-field
             v-model="email"
             class="pt-1"
+            autocomplete="off"
             :error-messages="emailErrors"
             required
             single-line
@@ -22,7 +23,7 @@
                 : ''
             "
             :filled="!emailIsTouched"
-            :color="'#5cb85ccc'"
+            :color="'#02bb8ccc'"
             @input="
               $v.email.$touch();
               checkMail();
@@ -42,7 +43,7 @@
           <v-btn
             :disabled="!isMailExists"
             icon
-            :color="'#5cb85ccc'"
+            :color="'#02bb8ccc'"
             v-bind="attrs"
             v-on="on"
             text

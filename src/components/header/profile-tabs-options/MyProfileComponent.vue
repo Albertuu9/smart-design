@@ -9,13 +9,14 @@
               <label class="input-label">{{ $t("register_page.required_name") }}</label>
               <v-text-field
                 v-model="name"
+                autocomplete="off"
                 class="pt-1 pr-2"
                 :error-messages="nameErrors"
                 required
                 single-line
                 outlined
                 dense
-                :color="'#5cb85ccc'"
+                :color="'#02bb8ccc'"
                 :placeholder="$t('register_page.name_placeholder')"
                 :filled="!nameIsTouched"
                 @input="$v.name.$touch()"
@@ -31,11 +32,12 @@
               <v-text-field
                 class="pt-1"
                 v-model="surname"
+                autocomplete="off"
                 :placeholder="$t('register_page.surname_placeholder')"
                 single-line
                 outlined
                 dense
-                :color="'#5cb85ccc'"
+                :color="'#02bb8ccc'"
                 :filled="!surnameIsTouched"
                 @focus="surnameIsTouched = true"
                 @blur="surnameIsTouched = false"
@@ -55,7 +57,7 @@
                 item-text="name"
                 item-value="alpha2Code"
                 v-model="country"
-                :color="'#5cb85ccc'"
+                :color="'#02bb8ccc'"
                 :placeholder="$t('register_page.country_placeholder')"
                 :error-messages="countryErrors"
                 :items="countries"
@@ -86,7 +88,7 @@
                 item-text="text"
                 item-value="id"
                 v-model="user"
-                :color="'#5cb85ccc'"
+                :color="'#02bb8ccc'"
                 :placeholder="$t('register_page.user_type_placeholder')"
                 :error-messages="userTypeErrors"
                 :items="userTypes"
@@ -110,6 +112,7 @@
               <v-text-field
                 v-model="email"
                 class="pt-1"
+                autocomplete="off"
                 :error-messages="emailErrors"
                 required
                 single-line
@@ -117,7 +120,7 @@
                 dense
                 :placeholder="$t('register_page.email_placeholder')"
                 :filled="!emailIsTouched"
-                :color="'#5cb85ccc'"
+                :color="'#02bb8ccc'"
                 @input="$v.email.$touch()"
                 @focus="emailIsTouched = true"
                 @blur="
@@ -132,7 +135,7 @@
               class="ml-2"
               @click="updateUser()"
               dark
-              :color="'#5cb85ccc'"
+              :color="'#02bb8ccc'"
               small
             >
               {{ $t("generic.save") }}
